@@ -24,4 +24,8 @@ def convert(input_path: Union[str, Path], output_path: Union[str, Path]):
 
         image = Image.frombytes('RGBA', (width, height), data)
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
-        image.save(output_path)
+
+        try:
+            image.save(output_path)
+        except OSError:
+            image.convert('RGB').save(output_path)
