@@ -1,7 +1,7 @@
 from typing import Union
 from pathlib import Path
 from PIL import Image
-from zlib import compressobj, decompressobj
+from zlib import compress, decompress
 
 
 def convert_file(src: Union[str, Path], dst: Union[str, Path] = None):
@@ -32,7 +32,6 @@ def _image_to_bip(src: Path, dst: Path):
 
         width, height = image.size
         data = image.tobytes()
-        compressor = compressobj()
 
         with open(dst, 'wb') as output:
             output.write(b'BIP1')
@@ -40,8 +39,7 @@ def _image_to_bip(src: Path, dst: Path):
             output.write(width.to_bytes(2, 'big'))
             output.write(height.to_bytes(2, 'big'))
 
-            output.write(compressor.compress(data))
-            output.write(compressor.flush())
+            output.write(compress(data))
 
 
 def _bip_to_image(src: Path, dst: Path):
@@ -55,9 +53,7 @@ def _bip_to_image(src: Path, dst: Path):
         width = int.from_bytes(bip.read(2), 'big')
         height = int.from_bytes(bip.read(2), 'big')
 
-        decompressor = decompressobj()
-        data = decompressor.decompress(bip.read())
-        data += decompressor.flush()
+        data = decompress(bip.read())
 
         image = Image.frombytes('RGBA', (width, height), data)
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
