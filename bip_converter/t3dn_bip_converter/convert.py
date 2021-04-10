@@ -4,12 +4,9 @@ from PIL import Image
 from zlib import compressobj, decompressobj
 
 
-def image_to_bip(input_path: Union[str, Path], output_path: Union[str, Path]):
+def _image_to_bip(src: Path, dst: Path):
     '''Convert various image formats to BIP.'''
-    input_path = Path(input_path).resolve()
-    output_path = Path(output_path).resolve()
-
-    with Image.open(input_path) as image:
+    with Image.open(src) as image:
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
         image = image.convert('RGBA')
 
@@ -17,7 +14,7 @@ def image_to_bip(input_path: Union[str, Path], output_path: Union[str, Path]):
         data = image.tobytes()
         compressor = compressobj()
 
-        with open(output_path, 'wb') as output:
+        with open(dst, 'wb') as output:
             output.write(b'BIP1')
 
             output.write(width.to_bytes(2, 'big'))
@@ -27,12 +24,9 @@ def image_to_bip(input_path: Union[str, Path], output_path: Union[str, Path]):
             output.write(compressor.flush())
 
 
-def bip_to_image(input_path: Union[str, Path], output_path: Union[str, Path]):
+def _bip_to_image(src: Path, dst: Path):
     '''Convert BIP to various image formats.'''
-    input_path = Path(input_path).resolve()
-    output_path = Path(output_path).resolve()
-
-    with open(input_path, 'rb') as bip:
+    with open(src, 'rb') as bip:
         magic = bip.read(4)
 
         if magic != b'BIP1':
@@ -49,6 +43,6 @@ def bip_to_image(input_path: Union[str, Path], output_path: Union[str, Path]):
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
 
         try:
-            image.save(output_path)
+            image.save(dst)
         except OSError:
-            image.convert('RGB').save(output_path)
+            image.convert('RGB').save(dst)
