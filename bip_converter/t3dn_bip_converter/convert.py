@@ -4,12 +4,17 @@ from PIL import Image
 from zlib import compressobj, decompressobj
 
 
-def convert_file(src: Union[str, Path], dst: Union[str, Path]):
+def convert_file(src: Union[str, Path], dst: Union[str, Path] = None):
+    '''Convert between BIP and various image formats.'''
     src = Path(src).resolve()
-    dst = Path(dst).resolve()
-
     src_bip = src.suffix.lower() == '.bip'
-    dst_bip = dst.suffix.lower() == '.bip'
+
+    if dst is not None:
+        dst = Path(src).resolve()
+        dst_bip = dst.suffix.lower() == '.bip'
+    else:
+        dst = src.with_suffix('.png' if src_bip else '.bip')
+        dst_bip = not src_bip
 
     if not src_bip and dst_bip:
         _image_to_bip(src, dst)
