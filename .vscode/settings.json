@@ -1,0 +1,18 @@
+{
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "python.formatting.provider": "yapf",
+    "python.formatting.yapfArgs": [
+        "--style",
+        "{based_on_style: google}"
+    ],
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "files.exclude": {
+        "**/*.pyc": true
+    }
+}
