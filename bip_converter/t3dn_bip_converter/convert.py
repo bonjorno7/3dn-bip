@@ -10,7 +10,7 @@ def convert_file(src: Union[str, Path], dst: Union[str, Path] = None):
     src_bip = src.suffix.lower() == '.bip'
 
     if dst is not None:
-        dst = Path(src).resolve()
+        dst = Path(dst).resolve()
         dst_bip = dst.suffix.lower() == '.bip'
     else:
         dst = src.with_suffix('.png' if src_bip else '.bip')
