@@ -11,11 +11,11 @@ else:
     _SUPPORT_PIL = True
 
 
-def load_file(src: Union[str, Path]) -> Tuple[int, int, List[int]]:
+def load_file(filepath: Union[str, Path]) -> Tuple[int, int, List[int]]:
     '''Load image preview data from file.
 
     Args:
-        src: The input file path.
+        filepath: The input file path.
 
     Returns:
         The width, height, and pixels.
@@ -24,7 +24,7 @@ def load_file(src: Union[str, Path]) -> Tuple[int, int, List[int]]:
         AssertionError: If pixel data type is not 32 bit.
         ValueError: If file is not BIP and PIL is not found.
     '''
-    with open(src, 'rb') as bip:
+    with open(filepath, 'rb') as bip:
         magic = bip.read(4)
 
         if magic == b'BIP1':
@@ -38,7 +38,7 @@ def load_file(src: Union[str, Path]) -> Tuple[int, int, List[int]]:
             return width, height, pixels
 
     if _SUPPORT_PIL:
-        with Image.open(src) as image:
+        with Image.open(filepath) as image:
             image = image.transpose(Image.FLIP_TOP_BOTTOM)
             image = image.convert('RGBA')
 
