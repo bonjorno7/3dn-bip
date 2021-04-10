@@ -11,9 +11,9 @@ def convert_file(src: Union[str, Path], dst: Union[str, Path]):
     src_bip = src.suffix.lower() == '.bip'
     dst_bip = dst.suffix.lower() == '.bip'
 
-    if src_bip and not dst_bip:
+    if not src_bip and dst_bip:
         _image_to_bip(src, dst)
-    elif not src_bip and dst_bip:
+    elif src_bip and not dst_bip:
         _bip_to_image(src, dst)
     else:
         raise ValueError('exactly one file must be in BIP format')
