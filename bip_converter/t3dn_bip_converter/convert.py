@@ -4,6 +4,21 @@ from PIL import Image
 from zlib import compressobj, decompressobj
 
 
+def convert_file(src: Union[str, Path], dst: Union[str, Path]):
+    src = Path(src).resolve()
+    dst = Path(dst).resolve()
+
+    src_bip = src.suffix.lower() == '.bip'
+    dst_bip = dst.suffix.lower() == '.bip'
+
+    if src_bip and not dst_bip:
+        _image_to_bip(src, dst)
+    elif not src_bip and dst_bip:
+        _bip_to_image(src, dst)
+    else:
+        raise ValueError('exactly one file must be in BIP format')
+
+
 def _image_to_bip(src: Path, dst: Path):
     '''Convert various image formats to BIP.'''
     with Image.open(src) as image:
