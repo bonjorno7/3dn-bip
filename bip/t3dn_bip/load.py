@@ -1,5 +1,4 @@
-from typing import Union, Tuple, List
-from pathlib import Path
+from typing import Tuple
 from zlib import decompress
 from array import array
 
@@ -11,14 +10,14 @@ else:
     _SUPPORT_PIL = True
 
 
-def load_file(filepath: Union[str, Path]) -> Tuple[int, int, List[int]]:
+def load_file(filepath: str) -> Tuple[tuple, list]:
     '''Load image preview data from file.
 
     Args:
         filepath: The input file path.
 
     Returns:
-        The width, height, and pixels.
+        The size and pixels of the image.
 
     Raises:
         AssertionError: If pixel data type is not 32 bit.
@@ -30,24 +29,20 @@ def load_file(filepath: Union[str, Path]) -> Tuple[int, int, List[int]]:
         if magic == b'BIP1':
             width = int.from_bytes(bip.read(2), 'big')
             height = int.from_bytes(bip.read(2), 'big')
-            data = decompress(bip.read())
 
-            pixels = array('i', data)
+            pixels = array('i', decompress(bip.read()))
             assert pixels.itemsize == 4, '32 bit type required for pixels'
 
-            return width, height, pixels
+            return ((width, height), pixels)
 
     if _SUPPORT_PIL:
         with Image.open(filepath) as image:
             image = image.transpose(Image.FLIP_TOP_BOTTOM)
             image = image.convert('RGBA')
 
-            width, height = image.size
-            data = image.tobytes()
-
-            pixels = array('i', data)
+            pixels = array('i', image.tobytes())
             assert pixels.itemsize == 4, '32 bit type required for pixels'
 
-            return width, height, pixels
+            return (image.size, pixels)
 
     raise ValueError('input is not a supported file format')
