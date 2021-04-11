@@ -6,6 +6,7 @@ from multiprocessing import cpu_count
 from threading import Event
 from queue import Queue
 from traceback import print_exc
+from time import time
 from typing import ItemsView, Iterator, KeysView, ValuesView
 from .load import can_load, load_file
 
@@ -94,15 +95,18 @@ class ImagePreviewCollection:
             self._queue.put((name, size, pixels, event))
 
     def _timer(self):
-        try:
-            args = self._queue.get(block=False)
-        except:
-            return 0.1
+        now = time()
 
-        try:
-            self._load_preview(*args)
-        except:
-            print_exc()
+        while time() - now < 0.1:
+            try:
+                args = self._queue.get(block=False)
+            except:
+                return 0.1
+
+            try:
+                self._load_preview(*args)
+            except:
+                print_exc()
 
         return 0.0
 
