@@ -3,7 +3,7 @@ import bpy
 
 class T3DN_PT_bip_example_panel(bpy.types.Panel):
     bl_idname = 'T3DN_PT_bip_example_panel'
-    bl_label = 'Grasswoods Pro'
+    bl_label = 'BIP Example'
     bl_category = '3D Ninjas'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
