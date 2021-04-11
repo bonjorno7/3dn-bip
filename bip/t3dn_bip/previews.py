@@ -5,6 +5,7 @@ from multiprocessing.dummy import Pool
 from multiprocessing import cpu_count
 from queue import Queue
 from traceback import print_exc
+from typing import ItemsView, Iterator, KeysView, ValuesView
 from .load import can_load, load_file
 
 
@@ -21,35 +22,39 @@ class ImagePreviewCollection:
         if not bpy.app.timers.is_registered(self._timer):
             bpy.app.timers.register(self._timer)
 
-    def __len__(self):
+    def __len__(self) -> int:
         '''Return the amount of previews in the collection.'''
         return len(self._collection)
 
-    def __iter__(self):
-        '''Return an iterate for the names in the collection.'''
+    def __iter__(self) -> Iterator[str]:
+        '''Return an iterator for the names in the collection.'''
         return iter(self._collection)
 
-    def __contains__(self, key):
+    def __contains__(self, key) -> bool:
         '''Return whether preview name is in collection.'''
         return key in self._collection
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> ImagePreview:
         '''Return preview with the given name.'''
         return self._collection[key]
 
-    def get(self, key: str, default=None):
+    def pop(self, key: str) -> ImagePreview:
+        '''Remove preview with the given name and return it.'''
+        return self._collection.pop(key)
+
+    def get(self, key: str, default=None) -> ImagePreview:
         '''Return preview with the given name, or default.'''
         return self._collection.get(key, default)
 
-    def keys(self):
+    def keys(self) -> KeysView[str]:
         '''Return preview names.'''
         return self._collection.keys()
 
-    def values(self):
+    def values(self) -> ValuesView[ImagePreview]:
         '''Return previews.'''
         return self._collection.values()
 
-    def items(self):
+    def items(self) -> ItemsView[str, ImagePreview]:
         '''Return pairs of name and preview.'''
         return self._collection.items()
 
@@ -112,7 +117,7 @@ class ImagePreviewCollection:
             bpy.app.timers.unregister(self._timer)
 
 
-def new():
+def new() -> ImagePreviewCollection:
     '''Return a new preview collection.'''
     return ImagePreviewCollection()
 
