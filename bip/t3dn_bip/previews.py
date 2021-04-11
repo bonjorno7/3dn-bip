@@ -3,6 +3,7 @@ import bpy.utils.previews
 from bpy.types import ImagePreview
 from multiprocessing.dummy import Pool
 from multiprocessing import cpu_count
+from threading import Event
 from queue import Queue
 from traceback import print_exc
 from typing import ItemsView, Iterator, KeysView, ValuesView
@@ -17,6 +18,7 @@ class ImagePreviewCollection:
         self._collection = bpy.utils.previews.new()
 
         self._pool = Pool(processes=cpu_count())
+        self._event = None
         self._queue = Queue()
 
         if not bpy.app.timers.is_registered(self._timer):
@@ -73,19 +75,23 @@ class ImagePreviewCollection:
         if filetype != 'IMAGE' or not can_load(filepath):
             return self._collection.load(name, filepath, filetype)
 
+        event = self._get_event()
         preview = self._collection.new(name)
 
         self._pool.apply_async(
             func=self._load_file,
-            args=(name, filepath),
+            args=(name, filepath, event),
             error_callback=print,
         )
 
         return preview
 
-    def _load_file(self, name: str, filepath: str):
-        size, pixels = load_file(filepath)
-        self._queue.put((name, size, pixels))
+    def _load_file(self, name: str, filepath: str, event: Event):
+        if not event.is_set():
+            size, pixels = load_file(filepath)
+
+        if not event.is_set():
+            self._queue.put((name, size, pixels, event))
 
     def _timer(self):
         try:
@@ -100,21 +106,35 @@ class ImagePreviewCollection:
 
         return 0.0
 
-    def _load_preview(self, name: str, size: tuple, pixels: list):
-        preview = self._collection[name]
-        preview.image_size = size
-        preview.image_pixels = pixels
+    def _load_preview(self, name: str, size: tuple, pixels: list, event: Event):
+        if not event.is_set():
+            preview = self._collection[name]
+            preview.image_size = size
+            preview.image_pixels = pixels
 
     def clear(self):
         '''Clear all previews.'''
+        self._set_event()
         self._collection.clear()
 
     def close(self):
         '''Close the collection and clear all previews.'''
+        self._set_event()
         self._collection.close()
 
         if bpy.app.timers.is_registered(self._timer):
             bpy.app.timers.unregister(self._timer)
+
+    def _get_event(self) -> Event:
+        if self._event is None:
+            self._event = Event()
+
+        return self._event
+
+    def _set_event(self):
+        if self._event is not None:
+            self._event.set()
+            self._event = None
 
 
 def new() -> ImagePreviewCollection:
