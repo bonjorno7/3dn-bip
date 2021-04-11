@@ -12,6 +12,7 @@ class ImagePreviewCollection:
     '''Dictionary-like class of previews.'''
 
     def __init__(self):
+        '''Create collection and start internal timer.'''
         self._collection = bpy.utils.previews.new()
 
         self._pool = Pool(processes=cpu_count())
@@ -20,11 +21,37 @@ class ImagePreviewCollection:
         if not bpy.app.timers.is_registered(self._timer):
             bpy.app.timers.register(self._timer)
 
+    def __len__(self):
+        '''Return the amount of previews in the collection.'''
+        return len(self._collection)
+
+    def __iter__(self):
+        '''Return an iterate for the names in the collection.'''
+        return iter(self._collection)
+
     def __contains__(self, key):
+        '''Return whether preview name is in collection.'''
         return key in self._collection
 
     def __getitem__(self, key):
+        '''Return preview with the given name.'''
         return self._collection[key]
+
+    def get(self, key: str, default=None):
+        '''Return preview with the given name, or default.'''
+        return self._collection.get(key, default)
+
+    def keys(self):
+        '''Return preview names.'''
+        return self._collection.keys()
+
+    def values(self):
+        '''Return previews.'''
+        return self._collection.values()
+
+    def items(self):
+        '''Return pairs of name and preview.'''
+        return self._collection.items()
 
     def new(self, name: str) -> ImagePreview:
         '''Generate a new empty preview.'''
@@ -38,7 +65,7 @@ class ImagePreviewCollection:
         return preview
 
     def load(self, name: str, filepath: str, filetype: str) -> ImagePreview:
-        '''Generate a new preview from given file path.'''
+        '''Generate a new preview from the given filepath.'''
         if name in self:
             return self[name]
 
