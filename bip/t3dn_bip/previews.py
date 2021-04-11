@@ -62,15 +62,15 @@ class ImagePreviewCollection:
 
     def new(self, name: str) -> ImagePreview:
         '''Generate a new empty preview.'''
-        if name in self:
-            return self[name]
+        if name in self._collection:
+            return self._collection[name]
 
         return self._collection.new(name)
 
     def load(self, name: str, filepath: str, filetype: str) -> ImagePreview:
         '''Generate a new preview from the given filepath.'''
-        if name in self:
-            return self[name]
+        if name in self._collection:
+            return self._collection[name]
 
         if filetype != 'IMAGE' or not can_load(filepath):
             return self._collection.load(name, filepath, filetype)
@@ -107,7 +107,7 @@ class ImagePreviewCollection:
         return 0.0
 
     def _load_preview(self, name: str, size: tuple, pixels: list, event: Event):
-        if not event.is_set():
+        if not event.is_set() and name in self._collection:
             preview = self._collection[name]
             preview.image_size = size
             preview.image_pixels = pixels
