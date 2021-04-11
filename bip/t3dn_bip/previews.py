@@ -58,11 +58,7 @@ class ImagePreviewCollection:
         if name in self:
             return self[name]
 
-        preview = self._collection.new(name)
-        preview.image_size = (1, 1)
-        preview.image_pixels_float = (0, 0, 0, 1)
-
-        return preview
+        return self._collection.new(name)
 
     def load(self, name: str, filepath: str, filetype: str) -> ImagePreview:
         '''Generate a new preview from the given filepath.'''
@@ -72,7 +68,7 @@ class ImagePreviewCollection:
         if filetype != 'IMAGE':
             return self._collection.load(name, filepath, filetype)
 
-        preview = self.new(name)
+        preview = self._collection.new(name)
 
         self._pool.apply_async(
             func=self._load_file,
