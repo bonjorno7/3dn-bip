@@ -5,7 +5,7 @@ from multiprocessing.dummy import Pool
 from multiprocessing import cpu_count
 from queue import Queue
 from traceback import print_exc
-from .load import load_file
+from .load import can_load, load_file
 
 
 class ImagePreviewCollection:
@@ -65,7 +65,7 @@ class ImagePreviewCollection:
         if name in self:
             return self[name]
 
-        if filetype != 'IMAGE':
+        if filetype != 'IMAGE' or not can_load(filepath):
             return self._collection.load(name, filepath, filetype)
 
         preview = self._collection.new(name)

@@ -10,6 +10,17 @@ else:
     _SUPPORT_PIL = True
 
 
+def can_load(filepath: str) -> bool:
+    '''Return whether an image can be loaded.'''
+    with open(filepath, 'rb') as bip:
+        magic = bip.read(4)
+
+        if magic == b'BIP1':
+            return True
+
+    return _SUPPORT_PIL
+
+
 def load_file(filepath: str) -> Tuple[tuple, list]:
     '''Load image preview data from file.
 
