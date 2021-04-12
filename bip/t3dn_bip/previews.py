@@ -20,12 +20,14 @@ class ImagePreviewCollection:
         '''Create collection and start internal timer.'''
         if not SUPPORT_PIL:
             print('Pillow is not installed, therefore:')
-            print('-   BIP image files are loaded without scaling.')
+            print('-   BIP images load without scaling.')
 
-            if max_size != (128, 128) and lazy_load:
-                print('-   Other image files are loaded in 128x128.')
-            elif max_size != (256, 256) and not lazy_load:
-                print('-   Other image files are loaded in 256x256.')
+            if lazy_load:
+                print('-   Other images load slowly (Blender standard).')
+            if lazy_load and max_size != (128, 128):
+                print('-   Other images load in 128x128 (Blender standard).')
+            elif not lazy_load and max_size != (256, 256):
+                print('-   Other images load in 256x256 (Blender standard).')
 
         self._collection = bpy.utils.previews.new()
         self._max_size = max_size
