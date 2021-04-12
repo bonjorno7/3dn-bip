@@ -63,16 +63,17 @@ class ImagePreviewCollection:
 
     def new(self, name: str) -> ImagePreview:
         '''Generate a new empty preview.'''
-        if name in self._collection:
-            return self._collection[name]
-
         return self._collection.new(name)
+
+    def new_safe(self, name: str) -> ImagePreview:
+        '''Generate a new empty preview or return existing.'''
+        if name in self:
+            return self[name]
+
+        return self.new(name)
 
     def load(self, name: str, filepath: str, filetype: str) -> ImagePreview:
         '''Generate a new preview from the given filepath.'''
-        if name in self._collection:
-            return self._collection[name]
-
         if filetype != 'IMAGE':
             return self._collection.load(name, filepath, filetype)
 
@@ -89,6 +90,18 @@ class ImagePreviewCollection:
         )
 
         return preview
+
+    def load_safe(
+        self,
+        name: str,
+        filepath: str,
+        filetype: str,
+    ) -> ImagePreview:
+        '''Generate a new preview from the given filepath or return existing.'''
+        if name in self:
+            return self[name]
+
+        return self.load(name, filepath, filetype)
 
     def _load_fallback(self, name: str, filepath: str) -> ImagePreview:
         '''Load preview using Blender's standard method.'''
