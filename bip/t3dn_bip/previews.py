@@ -96,19 +96,29 @@ class ImagePreviewCollection:
 
     def _timer(self):
         now = time()
+        redraw = False
+        delay = 0.1
 
         while time() - now < 0.1:
             try:
                 args = self._queue.get(block=False)
             except:
-                return 0.1
+                break
 
             try:
                 self._load_preview(*args)
             except:
                 print_exc()
+            else:
+                redraw = True
 
-        return 0.0
+        else:
+            delay = 0.0
+
+        if redraw:
+            self._tag_redraw()
+
+        return delay
 
     def _load_preview(self, name: str, size: tuple, pixels: list, event: Event):
         if not event.is_set() and name in self._collection:
@@ -139,6 +149,12 @@ class ImagePreviewCollection:
         if self._event is not None:
             self._event.set()
             self._event = None
+
+    def _tag_redraw(self):
+        for window in bpy.context.window_manager.windows:
+            for area in window.screen.areas:
+                for region in area.regions:
+                    region.tag_redraw()
 
 
 def new() -> ImagePreviewCollection:
