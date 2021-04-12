@@ -75,6 +75,7 @@ def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
 
 
 def _should_resize(size: tuple, max_size: tuple) -> bool:
+    '''Check whether width or height is greater than maximum.'''
     if max_size[0] and size[0] > max_size[0]:
         return True
 
@@ -85,6 +86,7 @@ def _should_resize(size: tuple, max_size: tuple) -> bool:
 
 
 def _resize_image(image: Image.Image, max_size: tuple) -> Image.Image:
+    '''Resize image to fit inside maximum.'''
     scale = min(
         max_size[0] / image.size[0] if max_size[0] else 1,
         max_size[1] / image.size[1] if max_size[1] else 1,
