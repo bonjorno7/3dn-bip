@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import bpy
 import bpy.utils.previews
 from bpy.types import ImagePreview
@@ -8,7 +10,7 @@ from queue import Queue
 from traceback import print_exc
 from time import time
 from typing import ItemsView, Iterator, KeysView, ValuesView
-from .utils import can_load, load_file, tag_redraw
+from .utils import SUPPORT_PIL, can_load, load_file, tag_redraw
 
 
 class ImagePreviewCollection:
@@ -16,6 +18,15 @@ class ImagePreviewCollection:
 
     def __init__(self, max_size: tuple = (128, 128), lazy_load: bool = True):
         '''Create collection and start internal timer.'''
+        if not SUPPORT_PIL:
+            print('Pillow is not installed, therefore:')
+            print('-   BIP image files are loaded without scaling.')
+
+            if max_size != (128, 128) and lazy_load:
+                print('-   Other image files are loaded in 128x128.')
+            elif max_size != (256, 256) and not lazy_load:
+                print('-   Other image files are loaded in 256x256.')
+
         self._collection = bpy.utils.previews.new()
         self._max_size = max_size
         self._lazy_load = lazy_load
