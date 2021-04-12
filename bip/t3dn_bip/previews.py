@@ -10,7 +10,7 @@ from queue import Queue
 from traceback import print_exc
 from time import time
 from typing import ItemsView, Iterator, KeysView, ValuesView
-from .utils import SUPPORT_PIL, can_load, load_file, tag_redraw
+from .utils import support_pillow, can_load, load_file, tag_redraw
 
 
 class ImagePreviewCollection:
@@ -18,7 +18,7 @@ class ImagePreviewCollection:
 
     def __init__(self, max_size: tuple = (128, 128), lazy_load: bool = True):
         '''Create collection and start internal timer.'''
-        if not SUPPORT_PIL:
+        if not support_pillow():
             print('Pillow is not installed, therefore:')
             print('-   BIP images load without scaling.')
 

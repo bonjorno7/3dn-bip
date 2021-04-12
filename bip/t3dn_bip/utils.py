@@ -7,10 +7,13 @@ from array import array
 
 try:
     from PIL import Image
-except:
-    SUPPORT_PIL = False
-else:
-    SUPPORT_PIL = True
+except ImportError:
+    Image = None
+
+
+def support_pillow() -> bool:
+    '''Check whether Pillow is installed.'''
+    return bool(Image)
 
 
 def can_load(filepath: str) -> bool:
@@ -21,7 +24,7 @@ def can_load(filepath: str) -> bool:
         if magic == b'BIP1':
             return True
 
-    return SUPPORT_PIL
+    return support_pillow()
 
 
 def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
@@ -46,7 +49,7 @@ def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
             height = int.from_bytes(bip.read(2), 'big')
             data = decompress(bip.read())
 
-            if SUPPORT_PIL and _should_resize((width, height), max_size):
+            if support_pillow() and _should_resize((width, height), max_size):
                 image = Image.frombytes('RGBA', (width, height), data)
                 image = _resize_image(image, max_size)
 
@@ -58,7 +61,7 @@ def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
 
             return ((width, height), pixels)
 
-    if SUPPORT_PIL:
+    if support_pillow():
         with Image.open(filepath) as image:
             if _should_resize(image.size, max_size):
                 image = _resize_image(image, max_size)
