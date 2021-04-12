@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import bpy
 from typing import Tuple
 from zlib import decompress
@@ -22,11 +24,12 @@ def can_load(filepath: str) -> bool:
     return _SUPPORT_PIL
 
 
-def load_file(filepath: str) -> Tuple[tuple, list]:
+def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
     '''Load image preview data from file.
 
     Args:
         filepath: The input file path.
+        max_size: Scale images above this size down.
 
     Returns:
         The size and pixels of the image.
@@ -41,14 +44,25 @@ def load_file(filepath: str) -> Tuple[tuple, list]:
         if magic == b'BIP1':
             width = int.from_bytes(bip.read(2), 'big')
             height = int.from_bytes(bip.read(2), 'big')
+            data = decompress(bip.read())
 
-            pixels = array('i', decompress(bip.read()))
+            if _SUPPORT_PIL and _should_resize((width, height), max_size):
+                image = Image.frombytes('RGBA', (width, height), data)
+                image = _resize_image(image, max_size)
+
+                width, height = image.size
+                data = image.tobytes()
+
+            pixels = array('i', data)
             assert pixels.itemsize == 4, '32 bit type required for pixels'
 
             return ((width, height), pixels)
 
     if _SUPPORT_PIL:
         with Image.open(filepath) as image:
+            if _should_resize(image.size, max_size):
+                image = _resize_image(image, max_size)
+
             image = image.transpose(Image.FLIP_TOP_BOTTOM)
             image = image.convert('RGBA')
 
@@ -58,6 +72,27 @@ def load_file(filepath: str) -> Tuple[tuple, list]:
             return (image.size, pixels)
 
     raise ValueError('input is not a supported file format')
+
+
+def _should_resize(size: tuple, max_size: tuple) -> bool:
+    if max_size[0] and size[0] > max_size[0]:
+        return True
+
+    if max_size[1] and size[1] > max_size[1]:
+        return True
+
+    return False
+
+
+def _resize_image(image: Image.Image, max_size: tuple) -> Image.Image:
+    scale = min(
+        max_size[0] / image.size[0] if max_size[0] else 1,
+        max_size[1] / image.size[1] if max_size[1] else 1,
+    )
+
+    width = int(image.size[0] * scale)
+    height = int(image.size[1] * scale)
+    return image.resize(size=(width, height))
 
 
 def tag_redraw():
