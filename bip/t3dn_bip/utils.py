@@ -8,9 +8,9 @@ from array import array
 try:
     from PIL import Image
 except:
-    _SUPPORT_PIL = False
+    SUPPORT_PIL = False
 else:
-    _SUPPORT_PIL = True
+    SUPPORT_PIL = True
 
 
 def can_load(filepath: str) -> bool:
@@ -21,7 +21,7 @@ def can_load(filepath: str) -> bool:
         if magic == b'BIP1':
             return True
 
-    return _SUPPORT_PIL
+    return SUPPORT_PIL
 
 
 def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
@@ -46,7 +46,7 @@ def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
             height = int.from_bytes(bip.read(2), 'big')
             data = decompress(bip.read())
 
-            if _SUPPORT_PIL and _should_resize((width, height), max_size):
+            if SUPPORT_PIL and _should_resize((width, height), max_size):
                 image = Image.frombytes('RGBA', (width, height), data)
                 image = _resize_image(image, max_size)
 
@@ -58,7 +58,7 @@ def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
 
             return ((width, height), pixels)
 
-    if _SUPPORT_PIL:
+    if SUPPORT_PIL:
         with Image.open(filepath) as image:
             if _should_resize(image.size, max_size):
                 image = _resize_image(image, max_size)
