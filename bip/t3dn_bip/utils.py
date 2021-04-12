@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import bpy
+import sys
+from subprocess import call
 from typing import Tuple
 from zlib import decompress
 from array import array
@@ -14,6 +16,15 @@ except ImportError:
 def support_pillow() -> bool:
     '''Check whether Pillow is installed.'''
     return bool(Image)
+
+
+def install_pillow():
+    '''Install Pillow and import the Image module.'''
+    args = [sys.executable, '-m', 'pip', 'install', 'Pillow']
+
+    if not call(args=args, timeout=60):
+        global Image
+        from PIL import Image
 
 
 def can_load(filepath: str) -> bool:
