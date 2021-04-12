@@ -14,9 +14,11 @@ from .utils import can_load, load_file, tag_redraw
 class ImagePreviewCollection:
     '''Dictionary-like class of previews.'''
 
-    def __init__(self):
+    def __init__(self, max_size: tuple = (128, 128), lazy_load: bool = True):
         '''Create collection and start internal timer.'''
         self._collection = bpy.utils.previews.new()
+        self._max_size = max_size
+        self._lazy_load = lazy_load
 
         self._pool = Pool(processes=cpu_count())
         self._event = None
@@ -83,11 +85,14 @@ class ImagePreviewCollection:
         event = self._get_event()
         preview = self._collection.new(name)
 
-        self._pool.apply_async(
-            func=self._load_file,
-            args=(name, filepath, event),
-            error_callback=print,
-        )
+        if self._lazy_load:
+            self._pool.apply_async(
+                func=self._load_file,
+                args=(name, filepath, event),
+                error_callback=print,
+            )
+        else:
+            self._load_file(name, filepath, event)
 
         return preview
 
@@ -106,15 +111,18 @@ class ImagePreviewCollection:
     def _load_fallback(self, name: str, filepath: str) -> ImagePreview:
         '''Load preview using Blender's standard method.'''
         preview = self._collection.load(name, filepath, 'IMAGE')
-        preview.image_size[:]  # Force Blender to load this preview now.
+        if not self._lazy_load:
+            preview.image_size[:]  # Force Blender to load this preview now.
         return preview
 
     def _load_file(self, name: str, filepath: str, event: Event):
         '''Load image contents from file and queue preview load.'''
-        if not event.is_set():
-            size, pixels = load_file(filepath)
+        if not self._lazy_load or not event.is_set():
+            size, pixels = load_file(filepath, self._max_size)
 
-        if not event.is_set():
+        if not self._lazy_load:
+            self._load_preview(name, size, pixels, event)
+        elif not event.is_set():
             self._queue.put((name, size, pixels, event))
 
     def _timer(self):
@@ -146,10 +154,11 @@ class ImagePreviewCollection:
 
     def _load_preview(self, name: str, size: tuple, pixels: list, event: Event):
         '''Load image contents into preview.'''
-        if not event.is_set() and name in self._collection:
-            preview = self._collection[name]
-            preview.image_size = size
-            preview.image_pixels = pixels
+        if not self._lazy_load or not event.is_set():
+            if name in self._collection:
+                preview = self._collection[name]
+                preview.image_size = size
+                preview.image_pixels = pixels
 
     def clear(self):
         '''Clear all previews.'''
@@ -182,9 +191,12 @@ class ImagePreviewCollection:
         self.close()
 
 
-def new() -> ImagePreviewCollection:
+def new(
+    max_size: tuple = (128, 128),
+    lazy_load: bool = True,
+) -> ImagePreviewCollection:
     '''Return a new preview collection.'''
-    return ImagePreviewCollection()
+    return ImagePreviewCollection(max_size, lazy_load)
 
 
 def remove(collection: ImagePreviewCollection):
