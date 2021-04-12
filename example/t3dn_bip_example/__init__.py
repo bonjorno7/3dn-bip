@@ -5,7 +5,7 @@ bl_info = {
     'version': (1, 0),
     'blender': (2, 80, 0),
     'location': '3D View > Sidebar',
-    'category': 'Object',
+    'category': 'Development',
 }
 
 from . import previews, ops, ui
