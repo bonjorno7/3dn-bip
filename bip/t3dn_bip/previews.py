@@ -8,7 +8,7 @@ from queue import Queue
 from traceback import print_exc
 from time import time
 from typing import ItemsView, Iterator, KeysView, ValuesView
-from .load import can_load, load_file
+from .utils import can_load, load_file, tag_redraw
 
 
 class ImagePreviewCollection:
@@ -118,7 +118,7 @@ class ImagePreviewCollection:
             delay = 0.0
 
         if redraw:
-            self._tag_redraw()
+            tag_redraw()
 
         return delay
 
@@ -154,13 +154,6 @@ class ImagePreviewCollection:
         if self._event is not None:
             self._event.set()
             self._event = None
-
-    def _tag_redraw(self):
-        '''Redraw every region in the program.'''
-        for window in bpy.context.window_manager.windows:
-            for area in window.screen.areas:
-                for region in area.regions:
-                    region.tag_redraw()
 
 
 def new() -> ImagePreviewCollection:

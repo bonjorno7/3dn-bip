@@ -1,3 +1,4 @@
+import bpy
 from typing import Tuple
 from zlib import decompress
 from array import array
@@ -57,3 +58,11 @@ def load_file(filepath: str) -> Tuple[tuple, list]:
             return (image.size, pixels)
 
     raise ValueError('input is not a supported file format')
+
+
+def tag_redraw():
+    '''Redraw every region in Blender.'''
+    for window in bpy.context.window_manager.windows:
+        for area in window.screen.areas:
+            for region in area.regions:
+                region.tag_redraw()
