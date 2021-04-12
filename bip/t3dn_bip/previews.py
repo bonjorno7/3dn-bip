@@ -177,6 +177,10 @@ class ImagePreviewCollection:
             self._event.set()
             self._event = None
 
+    def __del__(self):
+        '''Called when collection is garbage collected.'''
+        self.close()
+
 
 def new() -> ImagePreviewCollection:
     '''Return a new preview collection.'''
