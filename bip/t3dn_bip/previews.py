@@ -73,8 +73,11 @@ class ImagePreviewCollection:
         if name in self._collection:
             return self._collection[name]
 
-        if filetype != 'IMAGE' or not can_load(filepath):
+        if filetype != 'IMAGE':
             return self._collection.load(name, filepath, filetype)
+
+        if not can_load(filepath):
+            return self._load_fallback(name, filepath)
 
         event = self._get_event()
         preview = self._collection.new(name)
@@ -85,6 +88,12 @@ class ImagePreviewCollection:
             error_callback=print,
         )
 
+        return preview
+
+    def _load_fallback(self, name: str, filepath: str) -> ImagePreview:
+        '''Load preview using Blender's standard method.'''
+        preview = self._collection.load(name, filepath, 'IMAGE')
+        preview.image_size[:]  # Force Blender to load this preview now.
         return preview
 
     def _load_file(self, name: str, filepath: str, event: Event):
