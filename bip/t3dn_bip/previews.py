@@ -88,6 +88,7 @@ class ImagePreviewCollection:
         return preview
 
     def _load_file(self, name: str, filepath: str, event: Event):
+        '''Load image contents from file and queue preview load.'''
         if not event.is_set():
             size, pixels = load_file(filepath)
 
@@ -95,6 +96,7 @@ class ImagePreviewCollection:
             self._queue.put((name, size, pixels, event))
 
     def _timer(self):
+        '''Load queued image contents into previews.'''
         now = time()
         redraw = False
         delay = 0.1
@@ -121,6 +123,7 @@ class ImagePreviewCollection:
         return delay
 
     def _load_preview(self, name: str, size: tuple, pixels: list, event: Event):
+        '''Load image contents into preview.'''
         if not event.is_set() and name in self._collection:
             preview = self._collection[name]
             preview.image_size = size
@@ -140,17 +143,20 @@ class ImagePreviewCollection:
             bpy.app.timers.unregister(self._timer)
 
     def _get_event(self) -> Event:
+        '''Get the clear event, make one if necesssary.'''
         if self._event is None:
             self._event = Event()
 
         return self._event
 
     def _set_event(self):
+        '''Set the clear event, then remove the reference.'''
         if self._event is not None:
             self._event.set()
             self._event = None
 
     def _tag_redraw(self):
+        '''Redraw every region in the program.'''
         for window in bpy.context.window_manager.windows:
             for area in window.screen.areas:
                 for region in area.regions:
