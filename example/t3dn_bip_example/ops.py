@@ -1,12 +1,6 @@
 import bpy
 from . import previews
 
-enum_items = []
-
-
-def get_enum_items(self, context: bpy.types.Context):
-    return enum_items
-
 
 class T3DN_OT_bip_example_load_previews(bpy.types.Operator):
     bl_idname = 't3dn.bip_example_load_previews'
@@ -15,23 +9,22 @@ class T3DN_OT_bip_example_load_previews(bpy.types.Operator):
     bl_options = {'REGISTER', 'INTERNAL'}
 
     type: bpy.props.StringProperty()
-    enum: bpy.props.EnumProperty(items=get_enum_items)
 
     def invoke(self, context: bpy.types.Context, event: bpy.types.Event) -> set:
         paths = previews.folder.joinpath(self.type).glob(f'*.{self.type}')
         previews.collection.clear()
-        enum_items.clear()
 
-        for index, path in enumerate(paths):
-            preview = previews.collection.load(path.name, str(path), 'IMAGE')
-            item = (path.name, path.name, path.name, preview.icon_id, index)
-            enum_items.append(item)
+        for path in list(paths)[:96]:
+            previews.collection.load(path.name, str(path), 'IMAGE')
 
-        return context.window_manager.invoke_popup(self, width=120)
+        return context.window_manager.invoke_popup(self, width=1700)
 
     def draw(self, context: bpy.types.Context):
         layout = self.layout
-        layout.template_icon_view(self, 'enum')
+        grid = layout.grid_flow(row_major=True, columns=12)
+
+        for preview in previews.collection.values():
+            grid.template_icon(preview.icon_id, scale=6.8)
 
     def execute(self, context: bpy.types.Context) -> set:
         return {'FINISHED'}
