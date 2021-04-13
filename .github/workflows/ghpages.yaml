@@ -1,0 +1,75 @@
+name: GitHub Pages
+
+on:
+    push:
+        branches:
+            - publish
+jobs:
+    docs:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/setup-python@v2
+              with:
+                  python-version: 3.x
+
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  path: current
+
+            - name: Build docs
+              working-directory: current
+              run: |
+                  pip install mkdocs mkdocs-material
+                  mkdocs build -c -d build_docs/
+
+            - name: Checkout gh-pages branch
+              uses: actions/checkout@v2
+              with:
+                  ref: gh-pages
+                  path: gh-pages
+
+            - name: Create docs update branch
+              working-directory: gh-pages
+              run: git checkout -b gh-pages-update
+
+            - name: Copy docs
+              run: |
+                  cp -Rf current/build_docs/* gh-pages
+
+            - name: Push docs update branch
+              working-directory: gh-pages
+              run: |
+                  git config user.email "${{ github.actor }}@users.noreply.github.com"
+                  git config user.name "${{ github.actor }}"
+                  git add --all
+                  git commit --allow-empty -m "Update docs from commit ${{ github.sha }}"
+                  git push origin gh-pages-update --force
+
+            - name: Open docs update PR
+              uses: actions/github-script@v3
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                      pulls = await github.pulls.list({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        base: 'gh-pages',
+                        head: `${context.repo.owner}:gh-pages-update`,
+                        state: 'open',
+                      });
+                      for (const pull of pulls.data) {
+                        await github.pulls.update({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            pull_number: pull.number,
+                            state: 'closed',
+                        });
+                      }
+                      await github.pulls.create({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        base: 'gh-pages',
+                        head: 'gh-pages-update',
+                        title: 'Update docs from commit ${{ github.sha }}',
+                      });
