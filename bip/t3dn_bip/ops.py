@@ -5,6 +5,12 @@ from .utils import support_pillow, install_pillow
 
 
 class InstallPillow:
+    '''Base class for an operator that installs Pillow.
+
+    Usage:
+    -   Inherit bpy.types.Operator and InstallPillow.
+    -   Make sure to set bl_idname, it must be unique.
+    '''
     bl_label = 'Install Pillow'
     bl_description = 'Install the Python Imaging Library'
     bl_options = {'REGISTER', 'INTERNAL'}
