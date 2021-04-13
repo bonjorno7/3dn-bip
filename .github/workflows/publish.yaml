@@ -10,14 +10,23 @@ jobs:
         runs-on: ubuntu-20.04
         environment: publish
         steps:
+            # bip
             - uses: actions/checkout@v2
             - run: python3 -m pip install --user --upgrade build twine
+              working-directory: bip
             - run: python3 -m build
+              working-directory: bip
             - run: python3 -m twine upload dist/*
               working-directory: bip
               env:
                   TWINE_USERNAME: __token__
                   TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_BIP }}
+            # bip_converter
+            - uses: actions/checkout@v2
+            - run: python3 -m pip install --user --upgrade build twine
+              working-directory: bip_converter
+            - run: python3 -m build
+              working-directory: bip_converter
             - run: python3 -m twine upload dist/*
               working-directory: bip_converter
               env:
