@@ -14,6 +14,12 @@ jobs:
             - run: python3 -m pip install --user --upgrade build twine
             - run: python3 -m build
             - run: python3 -m twine upload dist/*
+              working-directory: bip
               env:
                   TWINE_USERNAME: __token__
-                  TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+                  TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_BIP }}
+            - run: python3 -m twine upload dist/*
+              working-directory: bip_converter
+              env:
+                  TWINE_USERNAME: __token__
+                  TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_BIP_CONVERTER }}
