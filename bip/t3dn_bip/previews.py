@@ -176,15 +176,20 @@ class ImagePreviewCollection:
     def clear(self):
         '''Clear all previews.'''
         self._set_event()
+
+        with self._queue.mutex:
+            self._queue.queue.clear()
+
         self._collection.clear()
 
     def close(self):
         '''Close the collection and clear all previews.'''
         self._set_event()
-        self._collection.close()
 
         if bpy.app.timers.is_registered(self._timer):
             bpy.app.timers.unregister(self._timer)
+
+        self._collection.close()
 
     def _get_event(self) -> Event:
         '''Get the clear event, make one if necesssary.'''
