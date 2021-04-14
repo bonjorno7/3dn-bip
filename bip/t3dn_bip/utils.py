@@ -51,7 +51,7 @@ def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
     Raises:
         AssertionError: If pixel data type is not 32 bit.
         AssertionError: If pixel count does not match size.
-        ValueError: If file is not BIP and PIL is not found.
+        ValueError: If file is not BIP and Pillow is not installed.
     '''
     with open(filepath, 'rb') as bip:
         magic = bip.read(4)
