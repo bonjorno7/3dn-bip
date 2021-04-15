@@ -127,7 +127,7 @@ class ImagePreviewCollection:
         '''Load preview using Blender's standard method.'''
         preview = self._collection.load(name, filepath, filetype)
 
-        if filetype == 'IMAGE' and not self._lazy_load:
+        if not self._lazy_load:
             preview.image_size[:]  # Force Blender to load this preview now.
 
         return preview
