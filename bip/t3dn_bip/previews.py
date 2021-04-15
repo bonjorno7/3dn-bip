@@ -33,12 +33,13 @@ class ImagePreviewCollection:
         self._max_size = max_size
         self._lazy_load = lazy_load
 
-        self._pool = Pool(processes=cpu_count())
-        self._event = None
-        self._queue = Queue()
+        if self._lazy_load:
+            self._pool = Pool(processes=cpu_count())
+            self._event = None
+            self._queue = Queue()
 
-        if not bpy.app.timers.is_registered(self._timer):
-            bpy.app.timers.register(self._timer)
+            if not bpy.app.timers.is_registered(self._timer):
+                bpy.app.timers.register(self._timer)
 
     def __len__(self) -> int:
         '''Return the amount of previews in the collection.'''
@@ -107,35 +108,44 @@ class ImagePreviewCollection:
         if not can_load(filepath):
             return self._load_fallback(name, filepath)
 
-        event = self._get_event()
-        preview = self._collection.new(name)
+        if not self._lazy_load:
+            return self._load_eager(name, filepath)
 
-        if self._lazy_load:
-            self._pool.apply_async(
-                func=self._load_file,
-                args=(name, filepath, event),
-                error_callback=print,
-            )
-        else:
-            self._load_file(name, filepath, event)
+        preview = self.new(name)
+
+        self._pool.apply_async(
+            func=self._load_async,
+            args=(name, filepath, self._get_event()),
+            error_callback=print,
+        )
 
         return preview
 
     def _load_fallback(self, name: str, filepath: str) -> ImagePreview:
         '''Load preview using Blender's standard method.'''
         preview = self._collection.load(name, filepath, 'IMAGE')
+
         if not self._lazy_load:
             preview.image_size[:]  # Force Blender to load this preview now.
+
         return preview
 
-    def _load_file(self, name: str, filepath: str, event: Event):
+    def _load_eager(self, name: str, filepath: str) -> ImagePreview:
+        '''Load image contents from file and load preview.'''
+        size, pixels = load_file(filepath, self._max_size)
+
+        preview = self.new(name)
+        preview.image_size = size
+        preview.image_pixels = pixels
+
+        return preview
+
+    def _load_async(self, name: str, filepath: str, event: Event):
         '''Load image contents from file and queue preview load.'''
-        if not self._lazy_load or not event.is_set():
+        if not event.is_set():
             size, pixels = load_file(filepath, self._max_size)
 
-        if not self._lazy_load:
-            self._load_preview(name, size, pixels, event)
-        elif not event.is_set():
+        if not event.is_set():
             self._queue.put((name, size, pixels, event))
 
     def _timer(self):
@@ -151,7 +161,7 @@ class ImagePreviewCollection:
                 break
 
             try:
-                self._load_preview(*args)
+                self._load_queued(*args)
             except:
                 print_exc()
             else:
@@ -165,29 +175,31 @@ class ImagePreviewCollection:
 
         return delay
 
-    def _load_preview(self, name: str, size: tuple, pixels: list, event: Event):
-        '''Load image contents into preview.'''
-        if not self._lazy_load or not event.is_set():
-            if name in self._collection:
-                preview = self._collection[name]
+    def _load_queued(self, name: str, size: tuple, pixels: list, event: Event):
+        '''Load queued image contents into preview.'''
+        if not event.is_set():
+            if name in self:
+                preview = self[name]
                 preview.image_size = size
                 preview.image_pixels = pixels
 
     def clear(self):
         '''Clear all previews.'''
-        self._set_event()
+        if self._lazy_load:
+            self._set_event()
 
-        with self._queue.mutex:
-            self._queue.queue.clear()
+            with self._queue.mutex:
+                self._queue.queue.clear()
 
         self._collection.clear()
 
     def close(self):
         '''Close the collection and clear all previews.'''
-        self._set_event()
+        if self._lazy_load:
+            self._set_event()
 
-        if bpy.app.timers.is_registered(self._timer):
-            bpy.app.timers.unregister(self._timer)
+            if bpy.app.timers.is_registered(self._timer):
+                bpy.app.timers.unregister(self._timer)
 
         self._collection.close()
 
