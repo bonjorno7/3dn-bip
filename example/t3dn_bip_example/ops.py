@@ -35,9 +35,41 @@ class T3DN_OT_bip_example_load_previews(bpy.types.Operator):
         return {'FINISHED'}
 
 
+class T3DN_OT_bip_example_load_misc(bpy.types.Operator):
+    bl_idname = 't3dn.bip_example_load_misc'
+    bl_label = 'Load Misc'
+    bl_description = 'Load movie, blend, and font previews'
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    def invoke(self, context: bpy.types.Context, event: bpy.types.Event) -> set:
+        previews.collection.clear()
+
+        movie = str(previews.folder.joinpath('misc', 'cube.mp4'))
+        blend = str(previews.folder.joinpath('misc', 'monkey.blend'))
+        font = str(previews.folder.joinpath('misc', 'courier.ttf'))
+
+        self.movie = previews.collection.load('movie', movie, 'MOVIE')
+        self.blend = previews.collection.load('blend', blend, 'BLEND')
+        self.font = previews.collection.load('font', font, 'FONT')
+
+        return context.window_manager.invoke_popup(self, width=800)
+
+    def draw(self, context: bpy.types.Context):
+        layout = self.layout
+        row = layout.row()
+
+        row.template_icon(self.movie.icon_id, scale=13.2)
+        row.template_icon(self.blend.icon_id, scale=13.2)
+        row.template_icon(self.font.icon_id, scale=13.2)
+
+    def execute(self, context: bpy.types.Context) -> set:
+        return {'FINISHED'}
+
+
 classes = (
     T3DN_OT_bip_example_install_pillow,
     T3DN_OT_bip_example_load_previews,
+    T3DN_OT_bip_example_load_misc,
 )
 
 
