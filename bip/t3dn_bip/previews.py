@@ -102,11 +102,8 @@ class ImagePreviewCollection:
 
     def load(self, name: str, filepath: str, filetype: str) -> ImagePreview:
         '''Generate a new preview from the given filepath.'''
-        if filetype != 'IMAGE':
-            return self._collection.load(name, filepath, filetype)
-
-        if not can_load(filepath):
-            return self._load_fallback(name, filepath)
+        if filetype != 'IMAGE' or not can_load(filepath):
+            return self._load_fallback(name, filepath, filetype)
 
         if not self._lazy_load:
             return self._load_eager(name, filepath)
@@ -121,11 +118,16 @@ class ImagePreviewCollection:
 
         return preview
 
-    def _load_fallback(self, name: str, filepath: str) -> ImagePreview:
+    def _load_fallback(
+        self,
+        name: str,
+        filepath: str,
+        filetype: str,
+    ) -> ImagePreview:
         '''Load preview using Blender's standard method.'''
-        preview = self._collection.load(name, filepath, 'IMAGE')
+        preview = self._collection.load(name, filepath, filetype)
 
-        if not self._lazy_load:
+        if filetype == 'IMAGE' and not self._lazy_load:
             preview.image_size[:]  # Force Blender to load this preview now.
 
         return preview
