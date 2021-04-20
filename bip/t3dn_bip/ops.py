@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import bpy
 from .utils import support_pillow, install_pillow
 

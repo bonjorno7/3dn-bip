@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import bpy
 import bpy.utils.previews
 from bpy.types import ImagePreview
