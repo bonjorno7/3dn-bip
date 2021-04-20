@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import bpy
 import sys
-from subprocess import call
 from typing import Tuple
 from zlib import decompress
 from array import array
+
+if sys.platform == 'win32':
+    from .windows import call
+else:
+    from subprocess import call
 
 try:
     from PIL import Image
