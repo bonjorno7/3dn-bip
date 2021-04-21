@@ -32,7 +32,9 @@ def install_pillow():
 
     if not subprocess.call(args=args, timeout=60):
         path = Path(USER_SITE).joinpath('PIL', '__init__.py')
+
         spec = importlib.util.spec_from_file_location('PIL', path)
+        spec.submodule_search_locations = [path.parent]
 
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
