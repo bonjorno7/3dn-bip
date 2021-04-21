@@ -34,9 +34,9 @@ def install_pillow():
         path = Path(USER_SITE).joinpath('PIL', '__init__.py')
 
         spec = importlib.util.spec_from_file_location('PIL', path)
-        spec.submodule_search_locations = [path.parent]
-
         module = importlib.util.module_from_spec(spec)
+
+        sys.modules[module.__name__] = module
         spec.loader.exec_module(module)
 
         global Image
