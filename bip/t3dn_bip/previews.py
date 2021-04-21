@@ -216,10 +216,6 @@ class ImagePreviewCollection:
             self._event.set()
             self._event = None
 
-    def __del__(self):
-        '''Called when collection is garbage collected.'''
-        self.close()
-
 
 def new(
     max_size: tuple = (128, 128),
