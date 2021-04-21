@@ -2,14 +2,18 @@ from __future__ import annotations
 
 import bpy
 import sys
-from typing import Tuple
+import site
+import subprocess
+import importlib.util
+from pathlib import Path
 from zlib import decompress
 from array import array
+from typing import Tuple
 
-if sys.platform == 'win32':
-    from .windows import call
-else:
-    from subprocess import call
+USER_SITE = site.getusersitepackages()
+
+if USER_SITE not in sys.path:
+    sys.path.append(USER_SITE)
 
 try:
     from PIL import Image
@@ -24,9 +28,15 @@ def support_pillow() -> bool:
 
 def install_pillow():
     '''Install Pillow and import the Image module.'''
-    args = [sys.executable, '-m', 'pip', 'install', 'Pillow']
+    args = [sys.executable, '-m', 'pip', 'install', '--user', 'Pillow']
 
-    if not call(args=args, timeout=60):
+    if not subprocess.call(args=args, timeout=60):
+        path = Path(USER_SITE).joinpath('PIL', '__init__.py')
+        spec = importlib.util.spec_from_file_location('PIL', path)
+
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
         global Image
         from PIL import Image
 
