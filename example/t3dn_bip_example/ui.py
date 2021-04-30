@@ -27,6 +27,7 @@ class T3DN_PT_bip_example_panel(bpy.types.Panel):
         ).type = 'jpg'
 
         layout.operator('t3dn.bip_example_load_misc')
+        layout.operator('t3dn.bip_example_load_test')
 
 
 classes = (T3DN_PT_bip_example_panel,)
