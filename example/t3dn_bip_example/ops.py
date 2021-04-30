@@ -35,9 +35,37 @@ class T3DN_OT_bip_example_load_previews(bpy.types.Operator):
         return {'FINISHED'}
 
 
+class T3DN_OT_bip_example_load_alpha(bpy.types.Operator):
+    bl_idname = 't3dn.bip_example_load_alpha'
+    bl_label = 'Load Alpha Previews'
+    bl_description = 'Load BIP and PNG with transparency'
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    def invoke(self, context: bpy.types.Context, event: bpy.types.Event) -> set:
+        previews.collection.clear()
+
+        bip = str(previews.folder.joinpath('alpha', 'rainbow.bip'))
+        png = str(previews.folder.joinpath('alpha', 'rainbow.png'))
+
+        self.bip = previews.collection.load('bip', bip, 'IMAGE')
+        self.png = previews.collection.load('png', png, 'IMAGE')
+
+        return context.window_manager.invoke_popup(self, width=300)
+
+    def draw(self, context: bpy.types.Context):
+        layout = self.layout
+        row = layout.row()
+
+        row.template_icon(self.bip.icon_id, scale=6.8)
+        row.template_icon(self.png.icon_id, scale=6.8)
+
+    def execute(self, context: bpy.types.Context) -> set:
+        return {'FINISHED'}
+
+
 class T3DN_OT_bip_example_load_misc(bpy.types.Operator):
     bl_idname = 't3dn.bip_example_load_misc'
-    bl_label = 'Load Misc'
+    bl_label = 'Load Misc Previews'
     bl_description = 'Load movie, blend, and font previews'
     bl_options = {'REGISTER', 'INTERNAL'}
 
@@ -66,39 +94,11 @@ class T3DN_OT_bip_example_load_misc(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class T3DN_OT_bip_example_load_alpha(bpy.types.Operator):
-    bl_idname = 't3dn.bip_example_load_alpha'
-    bl_label = 'Load Alpha'
-    bl_description = 'Load BIP and PNG with transparency'
-    bl_options = {'REGISTER', 'INTERNAL'}
-
-    def invoke(self, context: bpy.types.Context, event: bpy.types.Event) -> set:
-        previews.collection.clear()
-
-        bip = str(previews.folder.joinpath('alpha', 'rainbow.bip'))
-        png = str(previews.folder.joinpath('alpha', 'rainbow.png'))
-
-        self.bip = previews.collection.load('bip', bip, 'IMAGE')
-        self.png = previews.collection.load('png', png, 'IMAGE')
-
-        return context.window_manager.invoke_popup(self, width=300)
-
-    def draw(self, context: bpy.types.Context):
-        layout = self.layout
-        row = layout.row()
-
-        row.template_icon(self.bip.icon_id, scale=6.8)
-        row.template_icon(self.png.icon_id, scale=6.8)
-
-    def execute(self, context: bpy.types.Context) -> set:
-        return {'FINISHED'}
-
-
 classes = (
     T3DN_OT_bip_example_install_pillow,
     T3DN_OT_bip_example_load_previews,
-    T3DN_OT_bip_example_load_misc,
     T3DN_OT_bip_example_load_alpha,
+    T3DN_OT_bip_example_load_misc,
 )
 
 
