@@ -26,6 +26,7 @@ class T3DN_PT_bip_example_panel(bpy.types.Panel):
             text='Load JPG Previews',
         ).type = 'jpg'
 
+        layout.operator('t3dn.bip_example_load_alpha')
         layout.operator('t3dn.bip_example_load_misc')
 
 

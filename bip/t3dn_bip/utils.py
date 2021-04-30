@@ -78,7 +78,7 @@ def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
             data = decompress(bip.read())
 
             if support_pillow() and _should_resize((width, height), max_size):
-                image = Image.frombytes('RGBA', (width, height), data)
+                image = Image.frombytes('RGBa', (width, height), data)
                 image = _resize_image(image, max_size)
 
                 width, height = image.size
@@ -98,7 +98,12 @@ def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
                 image = _resize_image(image, max_size)
 
             image = image.transpose(Image.FLIP_TOP_BOTTOM)
-            image = image.convert('RGBA')
+
+            if not image.mode.endswith(('A', 'a')):
+                image = image.convert('RGBA')
+
+            elif image.mode != 'RGBa':
+                image = image.convert('RGBa')
 
             pixels = array('i', image.tobytes())
             assert pixels.itemsize == 4, '32 bit type required for pixels'
