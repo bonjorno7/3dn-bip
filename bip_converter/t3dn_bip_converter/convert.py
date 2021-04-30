@@ -28,7 +28,7 @@ def _image_to_bip(src: Path, dst: Path):
     '''Convert various image formats to BIP.'''
     with Image.open(src) as image:
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
-        image = image.convert('RGBA')
+        image = image.convert('RGBa')
 
         width, height = image.size
         data = image.tobytes()
@@ -55,7 +55,8 @@ def _bip_to_image(src: Path, dst: Path):
 
         data = decompress(bip.read())
 
-        image = Image.frombytes('RGBA', (width, height), data)
+        image = Image.frombytes('RGBa', (width, height), data)
+        image = image.convert('RGBA')
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
 
         try:
