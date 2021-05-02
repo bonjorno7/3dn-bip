@@ -43,9 +43,8 @@ def _image_to_bip(src: Union[str, Path], dst: Union[str, Path]):
             output.write(len(images).to_bytes(1, 'big'))
 
             for image, content in zip(images, contents):
-                width, height = image.size
-                output.write(width.to_bytes(2, 'big'))
-                output.write(height.to_bytes(2, 'big'))
+                for number in image.size:
+                    output.write(number.to_bytes(2, 'big'))
                 output.write(len(content).to_bytes(4, 'big'))
 
             for content in contents:
@@ -61,14 +60,13 @@ def _bip_to_image(src: Union[str, Path], dst: Union[str, Path]):
         count = int.from_bytes(bip.read(1), 'big')
         bip.seek(8 * (count - 1), io.SEEK_CUR)
 
-        width = int.from_bytes(bip.read(2), 'big')
-        height = int.from_bytes(bip.read(2), 'big')
+        size = [int.from_bytes(bip.read(2), 'big') for _ in range(2)]
         length = int.from_bytes(bip.read(4), 'big')
 
         bip.seek(-length, io.SEEK_END)
         content = decompress(bip.read())
 
-        image = Image.frombytes('RGBa', (width, height), content)
+        image = Image.frombytes('RGBa', size, content)
         image = image.convert('RGBA')
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
 
