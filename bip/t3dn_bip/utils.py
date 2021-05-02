@@ -71,9 +71,7 @@ def load_file(filepath: str, max_size: tuple) -> dict:
 
             icon_size = [int.from_bytes(bip.read(2), 'big') for _ in range(2)]
             icon_length = int.from_bytes(bip.read(4), 'big')
-
             bip.seek(8 * (count - 2), io.SEEK_CUR)
-
             image_size = [int.from_bytes(bip.read(2), 'big') for _ in range(2)]
             image_length = int.from_bytes(bip.read(4), 'big')
 
@@ -118,10 +116,12 @@ def load_file(filepath: str, max_size: tuple) -> dict:
 
             image_pixels = array('i', image.tobytes())
             assert image_pixels.itemsize == 4, 'unexpected bytes per pixel'
-            count = image.size[0] * image.size[1]
-            assert len(image_pixels) == count, 'unexpected amount of pixels'
+            length = image.size[0] * image.size[1]
+            assert len(image_pixels) == length, 'unexpected amount of pixels'
 
             data = {
+                'icon_size': image.size,
+                'icon_pixels': image_pixels,
                 'image_size': image.size,
                 'image_pixels': image_pixels,
             }
@@ -130,16 +130,12 @@ def load_file(filepath: str, max_size: tuple) -> dict:
                 icon = image.resize(size=(32, 32))
 
                 icon_pixels = array('i', icon.tobytes())
-                assert icon_pixels.itemsize == 4, 'pixel type must be 32 bit'
-                count = icon.size[0] * icon.size[1]
-                assert len(icon_pixels) == count, 'unexpected amount of pixels'
+                assert icon_pixels.itemsize == 4, 'unexpected bytes per pixel'
+                length = icon.size[0] * icon.size[1]
+                assert len(icon_pixels) == length, 'unexpected amount of pixels'
 
                 data['icon_size'] = icon.size
                 data['icon_pixels'] = icon_pixels
-
-            else:
-                data['icon_size'] = image.size
-                data['icon_pixels'] = image_pixels
 
             return data
 
