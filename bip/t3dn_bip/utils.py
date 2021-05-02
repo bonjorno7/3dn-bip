@@ -69,16 +69,12 @@ def load_file(filepath: str, max_size: tuple) -> dict:
         if bip.read(4) == b'BIP2':
             count = int.from_bytes(bip.read(1), 'big')
 
-            width = int.from_bytes(bip.read(2), 'big')
-            height = int.from_bytes(bip.read(2), 'big')
-            icon_size = (width, height)
+            icon_size = [int.from_bytes(bip.read(2), 'big') for _ in range(2)]
             icon_length = int.from_bytes(bip.read(4), 'big')
 
             bip.seek(8 * (count - 2), io.SEEK_CUR)
 
-            width = int.from_bytes(bip.read(2), 'big')
-            height = int.from_bytes(bip.read(2), 'big')
-            image_size = (width, height)
+            image_size = [int.from_bytes(bip.read(2), 'big') for _ in range(2)]
             image_length = int.from_bytes(bip.read(4), 'big')
 
             icon_content = decompress(bip.read(icon_length))
@@ -168,9 +164,8 @@ def _resize_image(image: 'Image.Image', max_size: tuple) -> 'Image.Image':
         max_size[1] / image.size[1] if max_size[1] else 1,
     )
 
-    width = int(image.size[0] * scale)
-    height = int(image.size[1] * scale)
-    return image.resize(size=(width, height))
+    size = [int(n * scale) for n in image.size]
+    return image.resize(size=size)
 
 
 def tag_redraw():
