@@ -1,6 +1,5 @@
-from __future__ import annotations
-
 import bpy
+import io
 import sys
 import site
 import subprocess
@@ -8,7 +7,6 @@ import importlib.util
 from pathlib import Path
 from zlib import decompress
 from array import array
-from typing import Tuple
 
 USER_SITE = site.getusersitepackages()
 
@@ -46,15 +44,13 @@ def install_pillow():
 def can_load(filepath: str) -> bool:
     '''Return whether an image can be loaded.'''
     with open(filepath, 'rb') as bip:
-        magic = bip.read(4)
-
-        if magic == b'BIP1':
+        if bip.read(4) == b'BIP2':
             return True
 
     return support_pillow()
 
 
-def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
+def load_file(filepath: str, max_size: tuple) -> dict:
     '''Load image preview data from file.
 
     Args:
@@ -62,7 +58,7 @@ def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
         max_size: Scale images above this size down.
 
     Returns:
-        The size and pixels of the image.
+        A dictionary with icon_size, icon_pixels, image_size, image_pixels.
 
     Raises:
         AssertionError: If pixel data type is not 32 bit.
@@ -70,48 +66,83 @@ def load_file(filepath: str, max_size: tuple) -> Tuple[tuple, list]:
         ValueError: If file is not BIP and Pillow is not installed.
     '''
     with open(filepath, 'rb') as bip:
-        magic = bip.read(4)
+        if bip.read(4) == b'BIP2':
+            count = int.from_bytes(bip.read(1), 'big')
+            assert count > 0, 'the file contains no images'
 
-        if magic == b'BIP1':
-            width = int.from_bytes(bip.read(2), 'big')
-            height = int.from_bytes(bip.read(2), 'big')
-            data = decompress(bip.read())
+            icon_size = [int.from_bytes(bip.read(2), 'big') for _ in range(2)]
+            icon_length = int.from_bytes(bip.read(4), 'big')
+            bip.seek(8 * (count - 2), io.SEEK_CUR)
+            image_size = [int.from_bytes(bip.read(2), 'big') for _ in range(2)]
+            image_length = int.from_bytes(bip.read(4), 'big')
 
-            if support_pillow() and _should_resize((width, height), max_size):
-                image = Image.frombytes('RGBa', (width, height), data)
+            icon_content = decompress(bip.read(icon_length))
+            bip.seek(-image_length, io.SEEK_END)
+            image_content = decompress(bip.read(image_length))
+
+            if support_pillow() and _should_resize(image_size, max_size):
+                image = Image.frombytes('RGBa', image_size, image_content)
                 image = _resize_image(image, max_size)
+                image_size = image.size
+                image_content = image.tobytes()
 
-                width, height = image.size
-                data = image.tobytes()
+            icon_pixels = array('i', icon_content)
+            assert icon_pixels.itemsize == 4, 'unexpected bytes per pixel'
+            length = icon_size[0] * icon_size[1]
+            assert len(icon_pixels) == length, 'unexpected amount of pixels'
 
-            pixels = array('i', data)
-            assert pixels.itemsize == 4, '32 bit type required for pixels'
+            image_pixels = array('i', image_content)
+            assert image_pixels.itemsize == 4, 'unexpected bytes per pixel'
+            length = image_size[0] * image_size[1]
+            assert len(image_pixels) == length, 'unexpected amount of pixels'
 
-            count = width * height
-            assert len(pixels) == count, 'unexpected amount of pixels'
-
-            return ((width, height), pixels)
+            return {
+                'icon_size': icon_size,
+                'icon_pixels': icon_pixels,
+                'image_size': image_size,
+                'image_pixels': image_pixels,
+            }
 
     if support_pillow():
         with Image.open(filepath) as image:
+            image = image.transpose(Image.FLIP_TOP_BOTTOM)
+
             if _should_resize(image.size, max_size):
                 image = _resize_image(image, max_size)
 
-            image = image.transpose(Image.FLIP_TOP_BOTTOM)
-
+            # Image modes ending with A have an alpha channel.
             if not image.mode.endswith(('A', 'a')):
+                # No need to pre-multiply alpha for an opaque image.
                 image = image.convert('RGBA')
-
+            # If we do have an alpha channel.
             elif image.mode != 'RGBa':
+                # Then pre-multiply it.
                 image = image.convert('RGBa')
 
-            pixels = array('i', image.tobytes())
-            assert pixels.itemsize == 4, '32 bit type required for pixels'
+            image_pixels = array('i', image.tobytes())
+            assert image_pixels.itemsize == 4, 'unexpected bytes per pixel'
+            length = image.size[0] * image.size[1]
+            assert len(image_pixels) == length, 'unexpected amount of pixels'
 
-            count = image.size[0] * image.size[1]
-            assert len(pixels) == count, 'unexpected amount of pixels'
+            data = {
+                'icon_size': image.size,
+                'icon_pixels': image_pixels,
+                'image_size': image.size,
+                'image_pixels': image_pixels,
+            }
 
-            return (image.size, pixels)
+            if _should_resize(image.size, (32, 32)):
+                icon = image.resize(size=(32, 32))
+
+                icon_pixels = array('i', icon.tobytes())
+                assert icon_pixels.itemsize == 4, 'unexpected bytes per pixel'
+                length = icon.size[0] * icon.size[1]
+                assert len(icon_pixels) == length, 'unexpected amount of pixels'
+
+                data['icon_size'] = icon.size
+                data['icon_pixels'] = icon_pixels
+
+            return data
 
     raise ValueError('input is not a supported file format')
 
@@ -127,16 +158,15 @@ def _should_resize(size: tuple, max_size: tuple) -> bool:
     return False
 
 
-def _resize_image(image: Image.Image, max_size: tuple) -> Image.Image:
+def _resize_image(image: 'Image.Image', max_size: tuple) -> 'Image.Image':
     '''Resize image to fit inside maximum.'''
     scale = min(
         max_size[0] / image.size[0] if max_size[0] else 1,
         max_size[1] / image.size[1] if max_size[1] else 1,
     )
 
-    width = int(image.size[0] * scale)
-    height = int(image.size[1] * scale)
-    return image.resize(size=(width, height))
+    size = [int(n * scale) for n in image.size]
+    return image.resize(size=size)
 
 
 def tag_redraw():

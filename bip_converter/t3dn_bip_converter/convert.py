@@ -1,3 +1,4 @@
+import io
 from typing import Union
 from pathlib import Path
 from PIL import Image
@@ -24,38 +25,53 @@ def convert_file(src: Union[str, Path], dst: Union[str, Path] = None):
         raise ValueError('exactly one file must be in BIP format')
 
 
-def _image_to_bip(src: Path, dst: Path):
+def _image_to_bip(src: Union[str, Path], dst: Union[str, Path]):
     '''Convert various image formats to BIP.'''
     with Image.open(src) as image:
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
-        image = image.convert('RGBa')
 
-        width, height = image.size
-        data = image.tobytes()
+        # Image modes ending with A have an alpha channel.
+        if not image.mode.endswith(('A', 'a')):
+            # No need to pre-multiply alpha for an opaque image.
+            image = image.convert('RGBA')
+        # If we do have an alpha channel.
+        elif image.mode != 'RGBa':
+            # Then pre-multiply it.
+            image = image.convert('RGBa')
+
+        images = [image.resize(size=(32, 32)), image]
+        contents = [compress(image.tobytes()) for image in images]
 
         with open(dst, 'wb') as output:
-            output.write(b'BIP1')
+            output.write(b'BIP2')
+            output.write(len(images).to_bytes(1, 'big'))
 
-            output.write(width.to_bytes(2, 'big'))
-            output.write(height.to_bytes(2, 'big'))
+            for image, content in zip(images, contents):
+                for number in image.size:
+                    output.write(number.to_bytes(2, 'big'))
+                output.write(len(content).to_bytes(4, 'big'))
 
-            output.write(compress(data))
+            for content in contents:
+                output.write(content)
 
 
-def _bip_to_image(src: Path, dst: Path):
+def _bip_to_image(src: Union[str, Path], dst: Union[str, Path]):
     '''Convert BIP to various image formats.'''
     with open(src, 'rb') as bip:
-        magic = bip.read(4)
-
-        if magic != b'BIP1':
+        if bip.read(4) != b'BIP2':
             raise ValueError('input is not a supported file format')
 
-        width = int.from_bytes(bip.read(2), 'big')
-        height = int.from_bytes(bip.read(2), 'big')
+        count = int.from_bytes(bip.read(1), 'big')
+        assert count > 0, 'the file contains no images'
+        bip.seek(8 * (count - 1), io.SEEK_CUR)
 
-        data = decompress(bip.read())
+        size = [int.from_bytes(bip.read(2), 'big') for _ in range(2)]
+        length = int.from_bytes(bip.read(4), 'big')
 
-        image = Image.frombytes('RGBa', (width, height), data)
+        bip.seek(-length, io.SEEK_END)
+        content = decompress(bip.read(length))
+
+        image = Image.frombytes('RGBa', size, content)
         image = image.convert('RGBA')
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
 

@@ -126,27 +126,30 @@ class ImagePreviewCollection:
         preview = self._collection.load(name, filepath, filetype)
 
         if not self._lazy_load:
-            preview.image_size[:]  # Force Blender to load this preview now.
+            preview.icon_size[:]  # Force Blender to load this icon now.
+            preview.image_size[:]  # Force Blender to load this image now.
 
         return preview
 
     def _load_eager(self, name: str, filepath: str) -> ImagePreview:
         '''Load image contents from file and load preview.'''
-        size, pixels = load_file(filepath, self._max_size)
+        data = load_file(filepath, self._max_size)
 
         preview = self.new(name)
-        preview.image_size = size
-        preview.image_pixels = pixels
+        preview.icon_size = data['icon_size']
+        preview.icon_pixels = data['icon_pixels']
+        preview.image_size = data['image_size']
+        preview.image_pixels = data['image_pixels']
 
         return preview
 
     def _load_async(self, name: str, filepath: str, event: Event):
         '''Load image contents from file and queue preview load.'''
         if not event.is_set():
-            size, pixels = load_file(filepath, self._max_size)
+            data = load_file(filepath, self._max_size)
 
         if not event.is_set():
-            self._queue.put((name, size, pixels, event))
+            self._queue.put((name, data, event))
 
     def _timer(self):
         '''Load queued image contents into previews.'''
@@ -175,13 +178,15 @@ class ImagePreviewCollection:
 
         return delay
 
-    def _load_queued(self, name: str, size: tuple, pixels: list, event: Event):
+    def _load_queued(self, name: str, data: dict, event: Event):
         '''Load queued image contents into preview.'''
         if not event.is_set():
             if name in self:
                 preview = self[name]
-                preview.image_size = size
-                preview.image_pixels = pixels
+                preview.icon_size = data['icon_size']
+                preview.icon_pixels = data['icon_pixels']
+                preview.image_size = data['image_size']
+                preview.image_pixels = data['image_pixels']
 
     def clear(self):
         '''Clear all previews.'''

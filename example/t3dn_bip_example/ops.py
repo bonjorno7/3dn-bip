@@ -54,10 +54,14 @@ class T3DN_OT_bip_example_load_alpha(bpy.types.Operator):
 
     def draw(self, context: bpy.types.Context):
         layout = self.layout
-        row = layout.row()
 
+        row = layout.row()
         row.template_icon(self.bip.icon_id, scale=6.8)
         row.template_icon(self.png.icon_id, scale=6.8)
+
+        row = layout.row()
+        row.operator('t3dn.bip_example_dummy', icon_value=self.bip.icon_id)
+        row.operator('t3dn.bip_example_dummy', icon_value=self.png.icon_id)
 
     def execute(self, context: bpy.types.Context) -> set:
         return {'FINISHED'}
@@ -94,11 +98,19 @@ class T3DN_OT_bip_example_load_misc(bpy.types.Operator):
         return {'FINISHED'}
 
 
+class T3DN_OT_bip_example_dummy(bpy.types.Operator):
+    bl_idname = 't3dn.bip_example_dummy'
+    bl_label = 'Dummy Operator'
+    bl_description = 'Does nothing'
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+
 classes = (
     T3DN_OT_bip_example_install_pillow,
     T3DN_OT_bip_example_load_previews,
     T3DN_OT_bip_example_load_alpha,
     T3DN_OT_bip_example_load_misc,
+    T3DN_OT_bip_example_dummy,
 )
 
 
