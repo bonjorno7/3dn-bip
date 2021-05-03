@@ -62,6 +62,7 @@ def _bip_to_image(src: Union[str, Path], dst: Union[str, Path]):
             raise ValueError('input is not a supported file format')
 
         count = int.from_bytes(bip.read(1), 'big')
+        assert count > 0, 'the file contains no images'
         bip.seek(8 * (count - 1), io.SEEK_CUR)
 
         size = [int.from_bytes(bip.read(2), 'big') for _ in range(2)]

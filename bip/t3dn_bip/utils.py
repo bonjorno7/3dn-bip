@@ -68,6 +68,7 @@ def load_file(filepath: str, max_size: tuple) -> dict:
     with open(filepath, 'rb') as bip:
         if bip.read(4) == b'BIP2':
             count = int.from_bytes(bip.read(1), 'big')
+            assert count > 0, 'the file contains no images'
 
             icon_size = [int.from_bytes(bip.read(2), 'big') for _ in range(2)]
             icon_length = int.from_bytes(bip.read(4), 'big')
