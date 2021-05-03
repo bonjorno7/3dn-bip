@@ -106,18 +106,10 @@ def load_file(filepath: str, max_size: tuple) -> dict:
     if support_pillow():
         with Image.open(filepath) as image:
             image = image.transpose(Image.FLIP_TOP_BOTTOM)
+            image = image.convert('RGBA').convert('RGBa')
 
             if _should_resize(image.size, max_size):
                 image = _resize_image(image, max_size)
-
-            # Image modes ending with A have an alpha channel.
-            if not image.mode.endswith(('A', 'a')):
-                # No need to pre-multiply alpha for an opaque image.
-                image = image.convert('RGBA')
-            # If we do have an alpha channel.
-            elif image.mode != 'RGBa':
-                # Then pre-multiply it.
-                image = image.convert('RGBa')
 
             image_pixels = array('i', image.tobytes())
             assert image_pixels.itemsize == 4, 'unexpected bytes per pixel'
