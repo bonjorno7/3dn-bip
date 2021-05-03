@@ -64,7 +64,7 @@ def _bip_to_image(src: Union[str, Path], dst: Union[str, Path]):
         length = int.from_bytes(bip.read(4), 'big')
 
         bip.seek(-length, io.SEEK_END)
-        content = decompress(bip.read())
+        content = decompress(bip.read(length))
 
         image = Image.frombytes('RGBa', size, content)
         image = image.convert('RGBA')
