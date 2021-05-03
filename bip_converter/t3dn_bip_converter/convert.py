@@ -30,9 +30,13 @@ def _image_to_bip(src: Union[str, Path], dst: Union[str, Path]):
     with Image.open(src) as image:
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
 
+        # Image modes ending with A have an alpha channel.
         if not image.mode.endswith(('A', 'a')):
+            # No need to pre-multiply alpha for an opaque image.
             image = image.convert('RGBA')
+        # If we do have an alpha channel.
         elif image.mode != 'RGBa':
+            # Then pre-multiply it.
             image = image.convert('RGBa')
 
         images = [image.resize(size=(32, 32)), image]
