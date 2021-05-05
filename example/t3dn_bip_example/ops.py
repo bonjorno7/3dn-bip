@@ -1,6 +1,8 @@
 import bpy
+from typing import List, Tuple
 from .t3dn_bip.ops import InstallPillow
 from . import previews
+from . import utils
 
 
 class T3DN_OT_bip_example_install_pillow(bpy.types.Operator, InstallPillow):
@@ -98,11 +100,98 @@ class T3DN_OT_bip_example_load_misc(bpy.types.Operator):
         return {'FINISHED'}
 
 
+icon_items: List[Tuple[str, str, str]] = []
+
+
+def get_icon_items(self, context: bpy.types.Context):
+    paths = previews.folder.joinpath(self.type).glob(f'*.{self.type}')
+    coll = previews.PREVIEW_COLL['images']
+
+    icon_items.clear()
+
+    for index, path in enumerate(list(paths)):
+        try:
+            icon = coll[str(path)]
+        except KeyError:
+            icon = coll.load(str(path), str(path), 'IMAGE')
+
+        icon_items.append((path.name, path.name, '', icon.icon_id, index))
+
+    return icon_items
+
+
+class T3DN_OT_bip_example_template_icon_view(bpy.types.Operator):
+    bl_idname = 't3dn.bip_example_template_icon_view'
+    bl_label = 'Template Icon View'
+    bl_description = 'Load and use images with the `template_icon_view` construct'
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    type: bpy.props.StringProperty()
+    icons: bpy.props.EnumProperty(items=get_icon_items)
+
+    def invoke(self, context: bpy.types.Context, event: bpy.types.Event) -> set:
+        return context.window_manager.invoke_popup(self, width=120)
+
+    def execute(self, context: bpy.types.Context) -> set:
+        return {'FINISHED'}
+
+    def draw(self, context: bpy.types.Context):
+        layout = self.layout
+        col = layout.column(align=True)
+        col.label(text='Click to Expand')
+        col.template_icon_view(self, 'icons')
+
+
+class T3DN_OT_bip_example_hero_image(bpy.types.Operator):
+    bl_idname = 't3dn.bip_example_hero_image'
+    bl_label = 'Hero Image Preview'
+    bl_description = 'Draw a high quality hero image'
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    icon_size = 512
+
+    type: bpy.props.StringProperty()
+
+    def invoke(self, context: bpy.types.Context, event: bpy.types.Event) -> set:
+        path = previews.folder.joinpath('hero', 'sunset.jpg')
+        coll = previews.PREVIEW_COLL['hero']
+
+        try:
+            self.icon = coll[str(path)]
+        except KeyError:
+            self.icon = coll.load(str(path), str(path), 'IMAGE')
+
+        x_loc = event.mouse_x
+        y_loc = event.mouse_y
+        x_val = x_loc - (self.icon_size / 2)
+        y_val = y_loc + 10
+
+        context.window.cursor_warp(x_val, y_val)
+        win_man = context.window_manager
+        return_value = win_man.invoke_popup(self, width=self.icon_size)
+        context.window.cursor_warp(x_loc, y_loc)
+
+        return return_value
+
+    def execute(self, context: bpy.types.Context) -> set:
+        return {'FINISHED'}
+
+    def draw(self, context: bpy.types.Context):
+        column = self.layout.column()
+        column.template_icon(
+            icon_value=self.icon.icon_id,
+            scale=utils.get_scale_from_res(resolution=self.icon_size),
+        )
+
+
 class T3DN_OT_bip_example_dummy(bpy.types.Operator):
     bl_idname = 't3dn.bip_example_dummy'
     bl_label = 'Dummy Operator'
     bl_description = 'Does nothing'
     bl_options = {'REGISTER', 'INTERNAL'}
+
+    def execute(self, context: bpy.types.Context) -> set:
+        return {'FINISHED'}
 
 
 classes = (
@@ -110,6 +199,8 @@ classes = (
     T3DN_OT_bip_example_load_previews,
     T3DN_OT_bip_example_load_alpha,
     T3DN_OT_bip_example_load_misc,
+    T3DN_OT_bip_example_template_icon_view,
+    T3DN_OT_bip_example_hero_image,
     T3DN_OT_bip_example_dummy,
 )
 

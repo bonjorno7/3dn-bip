@@ -12,22 +12,43 @@ class T3DN_PT_bip_example_panel(bpy.types.Panel):
     def draw(self, context: bpy.types.Context):
         layout = self.layout
         layout.operator_context = 'INVOKE_DEFAULT'
+        col = layout.column(align=True)
+        col.scale_y = 1.2
 
         icon = 'CHECKBOX_HLT' if support_pillow() else 'CHECKBOX_DEHLT'
-        layout.operator('t3dn.bip_example_install_pillow', icon=icon)
+        space = '     '
+        col.operator(
+            't3dn.bip_example_install_pillow',
+            text=f'Install Pillow{space}',
+            icon=icon,
+        )
 
-        layout.operator(
+        col = layout.column(align=True)
+        col.scale_y = 1.2
+
+        col.operator(
             't3dn.bip_example_load_previews',
             text='Load BIP Previews',
         ).type = 'bip'
 
-        layout.operator(
+        col.operator(
             't3dn.bip_example_load_previews',
             text='Load JPG Previews',
         ).type = 'jpg'
 
-        layout.operator('t3dn.bip_example_load_alpha')
-        layout.operator('t3dn.bip_example_load_misc')
+        col.operator(
+            't3dn.bip_example_template_icon_view',
+            text='Load BIP Enum Icons',
+        ).type = 'bip'
+
+        col.operator(
+            't3dn.bip_example_template_icon_view',
+            text='Load JPG Enum Icons',
+        ).type = 'jpg'
+
+        col.operator('t3dn.bip_example_load_alpha')
+        col.operator('t3dn.bip_example_load_misc')
+        col.operator('t3dn.bip_example_hero_image')
 
 
 classes = (T3DN_PT_bip_example_panel,)
