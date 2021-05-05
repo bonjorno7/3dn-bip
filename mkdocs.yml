@@ -1,3 +1,5 @@
+# TODO: Fix theme
+
 # Project information
 site_name: 3D Ninjas | Blender Image Preview
 site_url: https://3dninjas.github.io/3dn-bip/
@@ -12,72 +14,74 @@ edit_uri: ""
 # Copyright
 copyright: Copyright &copy; 2021 3D Ninjas GmbH
 
-theme:
-    name: material
+theme: readthedocs
+# theme:
+#     name: material
 
-    # Don't include MkDocs' JavaScript
-    include_search_page: false
-    search_index_only: true
+#     # Don't include MkDocs' JavaScript
+#     include_search_page: false
+#     search_index_only: true
 
-    palette:
-        # Light mode
-        - media: "(prefers-color-scheme: light)"
-          scheme: default
-          primary: indigo
-          accent: indigo
-          toggle:
-              icon: material/toggle-switch-off-outline
-              name: Switch to dark mode
+#     palette:
+#         # Light mode
+#         - media: "(prefers-color-scheme: light)"
+#           scheme: default
+#           primary: indigo
+#           accent: indigo
+#           toggle:
+#               icon: material/toggle-switch-off-outline
+#               name: Switch to dark mode
 
-        # Dark mode
-        - media: "(prefers-color-scheme: dark)"
-          scheme: slate
-          primary: red
-          accent: red
-          toggle:
-              icon: material/toggle-switch
-              name: Switch to light mode
+#         # Dark mode
+#         - media: "(prefers-color-scheme: dark)"
+#           scheme: slate
+#           primary: red
+#           accent: red
+#           toggle:
+#               icon: material/toggle-switch
+#               name: Switch to light mode
 
-    language: en
-    font:
-        text: Roboto
-        code: Roboto Mono
-    # favicon: assets/favicon.png
-    icon:
-        repo: fontawesome/brands/github-alt
+#     language: en
+#     font:
+#         text: Roboto
+#         code: Roboto Mono
+#     # favicon: assets/favicon.png
+#     icon:
+#         repo: fontawesome/brands/github-alt
 
-    features:
-        - search.suggest
-        - search.highlight
-        - navigation.tracking
-        - navigation.sections
+#     features:
+#         - search.suggest
+#         - search.highlight
+#         - navigation.tracking
+#         - navigation.sections
 
-extra:
-    social:
-        - icon: fontawesome/brands/github
-          link: https://github.com/3dninjas/
-        - icon: fontawesome/brands/twitter
-          link: https://twitter.com/3d_ninjas
-        - icon: fontawesome/brands/linkedin
-          link: https://www.linkedin.com/company/3dninjas/about/
+# extra:
+#     social:
+#         - icon: fontawesome/brands/github
+#           link: https://github.com/3dninjas/
+#         - icon: fontawesome/brands/twitter
+#           link: https://twitter.com/3d_ninjas
+#         - icon: fontawesome/brands/linkedin
+#           link: https://www.linkedin.com/company/3dninjas/about/
 
 # Page navigation
 nav:
+  - Getting Started:
     - Overview: index.md
-    - Features: features.md
+    - Getting Started: getting_started.md
     - Example: example.md
 
-markdown_extensions:
-    - admonition
-    - attr_list
-    - def_list
-    - pymdownx.mark
-    - pymdownx.tabbed
-    - pymdownx.details
-    - pymdownx.highlight
-    - pymdownx.inlinehilite
-    - pymdownx.snippets
-    - pymdownx.superfences
-    - pymdownx.emoji:
-          emoji_index: !!python/name:materialx.emoji.twemoji
-          emoji_generator: !!python/name:materialx.emoji.to_svg
+# markdown_extensions:
+#     - admonition
+#     - attr_list
+#     - def_list
+#     - pymdownx.mark
+#     - pymdownx.tabbed
+#     - pymdownx.details
+#     - pymdownx.highlight
+#     - pymdownx.inlinehilite
+#     - pymdownx.snippets
+#     - pymdownx.superfences
+#     - pymdownx.emoji:
+#           emoji_index: !!python/name:materialx.emoji.twemoji
+#           emoji_generator: !!python/name:materialx.emoji.to_svg
