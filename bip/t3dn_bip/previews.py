@@ -10,13 +10,15 @@ from time import time
 from typing import ItemsView, Iterator, KeysView, ValuesView
 from .utils import support_pillow, can_load, load_file, tag_redraw
 
+WARNINGS = True
+
 
 class ImagePreviewCollection:
     '''Dictionary-like class of previews.'''
 
     def __init__(self, max_size: tuple = (128, 128), lazy_load: bool = True):
         '''Create collection and start internal timer.'''
-        if not support_pillow():
+        if WARNINGS and not support_pillow():
             print('Pillow is not installed, therefore:')
             print('-   BIP images load without scaling.')
 
