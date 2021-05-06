@@ -10,7 +10,10 @@ class InstallPillow:
     -   Make sure to set bl_idname, it must be unique.
     '''
     bl_label = 'Install Pillow'
-    bl_description = 'Install the Python Imaging Library'
+    bl_description = '.\n'.join((
+        'Install the Python Imaging Library',
+        'This could take a few minutes',
+    ))
     bl_options = {'REGISTER', 'INTERNAL'}
 
     def execute(self: bpy.types.Operator, context: bpy.types.Context) -> set:
