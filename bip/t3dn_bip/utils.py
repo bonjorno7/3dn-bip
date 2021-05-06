@@ -26,19 +26,25 @@ def support_pillow() -> bool:
 
 def install_pillow():
     '''Install Pillow and import the Image module.'''
+    args = [sys.executable, '-m', 'ensurepip', '--default-pip']
+    if subprocess.call(args=args, timeout=60):
+        return
+
     args = [sys.executable, '-m', 'pip', 'install', '--user', 'Pillow']
+    if subprocess.call(args=args, timeout=60):
+        return
 
-    if not subprocess.call(args=args, timeout=60):
-        path = Path(USER_SITE).joinpath('PIL', '__init__.py')
+    name = 'PIL'
+    path = Path(USER_SITE).joinpath(name, '__init__.py')
 
-        spec = importlib.util.spec_from_file_location('PIL', path)
-        module = importlib.util.module_from_spec(spec)
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
 
-        sys.modules[module.__name__] = module
-        spec.loader.exec_module(module)
+    sys.modules[module.__name__] = module
+    spec.loader.exec_module(module)
 
-        global Image
-        from PIL import Image
+    global Image
+    from PIL import Image
 
 
 def can_load(filepath: str) -> bool:
