@@ -1,5 +1,5 @@
 import bpy
-from .utils import support_pillow, install_pillow
+from .utils import install_pillow
 
 
 class InstallPillow:
@@ -14,15 +14,9 @@ class InstallPillow:
     bl_options = {'REGISTER', 'INTERNAL'}
 
     def execute(self: bpy.types.Operator, context: bpy.types.Context) -> set:
-        if support_pillow():
-            self.report({'INFO'}, 'Pillow is already installed')
-            return {'CANCELLED'}
-        else:
-            install_pillow()
-
-        if support_pillow():
+        if install_pillow():
             self.report({'INFO'}, 'Pillow was installed successfully')
-            return {'FINISHED'}
         else:
             self.report({'WARNING'}, 'Pillow failed to install')
-            return {'CANCELLED'}
+
+        return {'FINISHED'}
