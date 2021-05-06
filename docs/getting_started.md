@@ -1,10 +1,20 @@
-We have provided an example to help you get acquainted with BIP.
+To get started, you will either have to:
 
-1. You will first have to download the library from pip:
-   [https://pypi.org/project/t3dn-bip/](https://pypi.org/project/t3dn-bip/)
-1. TODO: Continue writing the steps.
+-   Download the repository and copy the `t3dn_bip` folder within the package
+    to a folder within your addon.
+-   Download the library from pip, find it's location and copy the `t3dn_bip`
+    folder to a folder within your addon.
 
-The folder structure of the assumed example is as follows:
+### Links
+
+-   3DN BIP repository: [https://github.com/3dninjas/3dn-bip]()
+-   PIP/PyPI: [https://pypi.org/project/t3dn-bip/]()
+
+### Example - Requirements
+
+We have provided an example to help you get acquainted with BIP. In order for
+this example to work on your machine, you will need to match the folder
+structure below or adjust the code to work for your own example.
 
 ```
 __init__.py
@@ -15,11 +25,27 @@ __init__.py
 \images\image2.bip
 ```
 
-```python
-from pathlib import Path
-from .t3dn_bip import previews
+### Example - Code
 
+Once you have the structure described above, feel free to copy the code below
+into the `__init__.py` file. You can then test this within Blender via one of
+the two methods below.
+
+-   Zip the folder and install it as you would any other addon within Blender.
+-   Use a symbolic link or junction point from this folder into the addon folder
+    within Blender.
+
+Once you have it up and running within Blender, notice the detail available
+within the provided images in comparison to what is provided by default within
+Blender.
+If you'd like more examples of the capability of the library, feel free to take
+a [look at some examples we have created](example.md).
+
+````python
+from pathlib import Path
 import bpy
+import bpy.utils.previews
+from .t3dn_bip import previews
 
 bl_info = {
     "name": "BIP",
@@ -32,12 +58,6 @@ bl_info = {
     "category": "Generic"
 }
 
-# This will be used to access the package directory, initialized on registration
-folder = None
-
-# An empty dictionary to hold the preview collections
-PREVIEW_COLL = {}
-
 
 class T3DN_PT_bip_panel(bpy.types.Panel):
     bl_label = "BIP Panel"
@@ -47,50 +67,44 @@ class T3DN_PT_bip_panel(bpy.types.Panel):
 
     def draw(self, context):
 
-        # NOTE: Step 1 - Add this folder to the project and add a few images.
-        images = folder.joinpath('images')
+        # NOTE: Ensure the .bip images are in the `images' folder.
+        images = Path(__file__).resolve().parent.joinpath('images')
+        images = images.glob('*.bip')
 
-        # NOTE: Step 2 - Replace the image names with the images you added
-        # to the folder in the stop above.
-        image_names = ('image0.bip', 'image1.bip', 'image2.bip')
-
-        coll = PREVIEW_COLL['images']
+        bip = PREVIEW_COLL['images']
 
         layout = self.layout
         grid = layout.grid_flow()
-        row = grid.row(align=True)
 
-        # Load each of the images
-        for item in image_names:
-            image = str(images.joinpath(item))
+        # Loop throug the images in the folder and draw them
+        for item in images:
+            image = str(item)
             try:
-                icon = coll[image]
+                icon = bip[image]
             except KeyError:
-                icon = coll.load(image, image, 'IMAGE')
+                icon = bip.load(image, image, 'IMAGE')
 
-            row.template_icon(
+            grid.template_icon(
                 icon_value=icon.icon_id,
                 scale=13.2,
             )
 
 
+# Empty dictionary to hold the preview collections
+PREVIEW_COLL = {}
+
+
 def register():
-    global folder, PREVIEW_COLL
+    global FOLDER, PREVIEW_COLL
 
-    # Access the package directory
-    folder = Path(__file__).resolve().parent
-
-    # Preview collection to store 128 by 128 images
-    # NOTE: Step 3 - Try changing the  parameter to both larger and smaller
-    # sizes
-    size = 256
-    PREVIEW_COLL['images'] = previews.new(max_size=(size, size), lazy_load=True)
+    # Preview collection to store 256 by 256 images
+    PREVIEW_COLL['images'] = previews.new(max_size=(256, 256), lazy_load=True)
 
     bpy.utils.register_class(T3DN_PT_bip_panel)
 
 
 def unregister():
-    global folder, collection, PREVIEW_COLL
+    global FOLDER, PREVIEW_COLL
 
     bpy.utils.unregister_class(T3DN_PT_bip_panel)
 
@@ -99,3 +113,4 @@ def unregister():
         previews.remove(item)
     PREVIEW_COLL.clear()
 ```
+````

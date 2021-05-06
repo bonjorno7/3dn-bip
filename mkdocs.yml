@@ -70,6 +70,7 @@ nav:
     - Overview: index.md
     - Getting Started: getting_started.md
     - Example: example.md
+    - Converter: converter.md
 
 # markdown_extensions:
 #     - admonition
