@@ -29,13 +29,13 @@ def install_pillow() -> bool:
     command = [sys.executable, '-m', 'ensurepip']
     options = ['--user', '--upgrade', '--default-pip']
 
-    if subprocess.call(args=command + options, timeout=60):
+    if subprocess.call(args=command + options, timeout=60 * 10):
         return False
 
     command = [sys.executable, '-m', 'pip']
     options = ['install', '--user', '--upgrade', 'Pillow']
 
-    if subprocess.call(args=command + options, timeout=60):
+    if subprocess.call(args=command + options, timeout=60 * 10):
         return False
 
     name = 'PIL'
