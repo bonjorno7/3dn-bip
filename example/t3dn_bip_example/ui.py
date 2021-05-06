@@ -13,8 +13,8 @@ class T3DN_PT_bip_example_panel(bpy.types.Panel):
         layout = self.layout
         layout.operator_context = 'INVOKE_DEFAULT'
 
-        icon = 'CHECKBOX_HLT' if support_pillow() else 'CHECKBOX_DEHLT'
-        layout.operator('t3dn.bip_example_install_pillow', icon=icon)
+        text = 'Update Pillow' if support_pillow() else 'Install Pillow'
+        layout.operator('t3dn.bip_example_install_pillow', text=text)
 
         layout.operator(
             't3dn.bip_example_load_previews',
