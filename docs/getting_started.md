@@ -41,7 +41,7 @@ Blender.
 If you'd like more examples of the capability of the library, feel free to take
 a [look at some examples we have created](example.md).
 
-````python
+```python
 from pathlib import Path
 import bpy
 import bpy.utils.previews
@@ -113,4 +113,3 @@ def unregister():
         previews.remove(item)
     PREVIEW_COLL.clear()
 ```
-````
