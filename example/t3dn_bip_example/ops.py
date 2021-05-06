@@ -165,7 +165,7 @@ class T3DN_OT_bip_example_hero_image(bpy.types.Operator):
     type: bpy.props.StringProperty()
 
     def invoke(self, context: bpy.types.Context, event: bpy.types.Event) -> set:
-        path = previews.folder.joinpath('hero', 'sunset.jpg')
+        path = previews.folder.joinpath('hero', f'sunset.{self.type}')
         coll = previews.PREVIEW_COLL['hero']
 
         try:
