@@ -31,7 +31,7 @@ def support_pillow() -> bool:
 
 def install_pillow() -> bool:
     '''Install Pillow and import the Image module.'''
-    if Path(sys.executable).stem.lower() == 'python':
+    if 'python' in Path(sys.executable).stem.lower():
         exe = sys.executable
     else:
         exe = bpy.app.binary_path_python
