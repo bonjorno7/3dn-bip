@@ -25,20 +25,31 @@ To get started, you will either have to:
 ## Creating `.bip` Images
 
 In order to get the best results out of the library, we recommend using the
-`.bip` format. Once you have the [BIP Converter](https://pypi.org/project/t3dn-bip-converter/)
-installed, right click and download the images below.
+`.bip` format. You can choose to download the already converted images from
+below, but if you'd like to get acquainted with the
+[BIP Converter](https://pypi.org/project/t3dn-bip-converter/), dowload the `.jpg`
+images and follow the guide below that to convert them to `.bip`
 
-![Image 0](\images\image0.jpg)
-![Image 1](\images\image1.jpg)
-![Image 2](\images\image2.jpg)
+-   `.bip` Images
 
-After the images are downloaded, follow the steps below to convert the images to
+    -   [image0.bip](\images\image0.bip)
+    -   [image1.bip](\images\image1.bip)
+    -   [image2.bip](\images\image2.bip)
+
+-   `.jpg` Images
+
+    -   [image0.jpg](\images\image0.jpg)
+    -   [image1.jpg](\images\image1.jpg)
+    -   [image2.jpg](\images\image2.jpg)
+
+If After the images are downloaded, follow the steps below to convert the images to
 the `.bip` format.
 
 ## BIP Converter
 
-Once you have the converter, get the absolute path to the image you would like
-to convert an image, you have two options for the operation to be tackled:
+If you opt to learn more about the converter, this section is for you. Once you
+have it installed, get the absolute path to the image you would like to convert.
+You have two options for the operation to be tackled:
 
 -   Convert to `.bip`, this is done by passing the path to the original image as
     a single arguement
