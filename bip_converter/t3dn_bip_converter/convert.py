@@ -31,7 +31,10 @@ def _image_to_bip(src: Union[str, Path], dst: Union[str, Path]):
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
         image = image.convert('RGBA').convert('RGBa')
 
-        images = [image.resize(size=(32, 32)), image]
+        if image.size == (32, 32):
+            images = [image]
+        else:
+            images = [image.resize(size=(32, 32)), image]
         contents = [compress(image.tobytes()) for image in images]
 
         with open(dst, 'wb') as output:

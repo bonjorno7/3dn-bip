@@ -15,13 +15,8 @@ class T3DN_PT_bip_example_panel(bpy.types.Panel):
         col = layout.column(align=True)
         col.scale_y = 1.2
 
-        icon = 'CHECKBOX_HLT' if support_pillow() else 'CHECKBOX_DEHLT'
-        space = '     '
-        col.operator(
-            't3dn.bip_example_install_pillow',
-            text=f'Install Pillow{space}',
-            icon=icon,
-        )
+        text = 'Update Pillow' if support_pillow() else 'Install Pillow'
+        layout.operator('t3dn.bip_example_install_pillow', text=text)
 
         col = layout.column(align=True)
         col.scale_y = 1.2
