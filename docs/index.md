@@ -1,6 +1,6 @@
 ## About
 
-**Blender Image Preview**, or BIP for short is a [Blender](https://blender.org)
+**Blender Image Preview**, or BIP for short is a **[Blender](https://blender.org)**
 library by 3D Ninjas that allows addon developers to have extra functionality
 that comes built into Blender but takes quite some time to set up.
 
@@ -13,11 +13,11 @@ modifications in the right buffer.
 ### Origin
 
 BIP came about as a solution to image previews on an asset manager that we are
-currently developing at [3D Ninjas](https://3dninjas.io). While working on this
-project, we realized that the resolution of the images provided by the default
-`bpy.utils.previews` was quite limiting in that we had no control as to image
-quality/resolution. After some sessions and development, BIP came to life. We
-decided that such knowledge should not be hoarded but rather shared with the
+currently developing at **[3D Ninjas](https://3dninjas.io)**. While working on
+this project, we realized that the resolution of the images provided by the
+default `bpy.utils.previews` was quite limiting in that we had no control as to
+image quality/resolution. After some sessions and development, BIP came to life.
+We decided that such knowledge should not be hoarded but rather shared with the
 Blender community.
 
 ### Ease-Of-Use
@@ -34,9 +34,8 @@ it stand out.
 ### Controlled Environment
 
 Quickly load optimized images images that they have control over into Blender
-using a custom format named `.bip`. You can look into how to getyour images in
-this format using our standalone `bip converter` detailed in this
-**[Guide](converter.md)**.
+using a custom format named `.bip`. How to convert your images to `.bip` is
+covered in the **[Getting Started](getting_started.md)** section.
 
 ### Arbitrarily Sized Images
 
@@ -81,9 +80,16 @@ then the library will default to Blender's standard preview service.
 -   Support for loading previews that are out of your control with the use of
     the [`Pillow`](https://pypi.org/project/Pillow/) library.
 
-## Disadvantages
+-   Pre-set safety when loading previews, instead of using the `load()` method,
+    you can opt to use the `load_safe()` method. The same is the case for the
+    `new()` method. This allows you to focus on loading your previews and less
+    on whether you need to provide a safety check.
 
--   TODO: Write disadvantages.
+## Drawbacks
+
+-   When in need of loading multiple large images, this is prone to being slow,
+    the best case use of this library is multiple reasonably sized images or
+    single large sized images.
 
 ---
 
