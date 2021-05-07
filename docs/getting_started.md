@@ -1,3 +1,5 @@
+## Pre-Requisites
+
 To get started, you will either have to:
 
 -   Download the repository and copy the `t3dn_bip` folder within the package
@@ -7,14 +9,18 @@ To get started, you will either have to:
 
 ### Links
 
--   3DN BIP repository: [https://github.com/3dninjas/3dn-bip]()
--   PIP/PyPI: [https://pypi.org/project/t3dn-bip/]()
+-   Github Repository: [https://github.com/3dninjas/3dn-bip]()
+-   PIP/PyPI Project: [https://pypi.org/project/t3dn-bip/]()
 
-### Example - Requirements
+---
 
-We have provided an example to help you get acquainted with BIP. In order for
-this example to work on your machine, you will need to match the folder
+## Example
+
+We have provided an example to help you get acquainted with BIP. In order
+for this example to work on your machine, you will need to match the folder
 structure below or adjust the code to work for your own example.
+
+<!-- TODO: Find a way to make the three images below accessible to the user -->
 
 ```
 __init__.py
@@ -25,21 +31,22 @@ __init__.py
 \images\image2.bip
 ```
 
-### Example - Code
-
 Once you have the structure described above, feel free to copy the code below
 into the `__init__.py` file. You can then test this within Blender via one of
 the two methods below.
 
 -   Zip the folder and install it as you would any other addon within Blender.
+    [We reccomend the use of 7-Zip](https://www.7-zip.org/download.html).
 -   Use a symbolic link or junction point from this folder into the addon folder
     within Blender.
 
-Once you have it up and running within Blender, notice the detail available
-within the provided images in comparison to what is provided by default within
-Blender.
+Once that is done, you can install and look at the code in action within
+Blender, notice the detail available within the provided images in comparison to
+what you would have by default with Blender.
 If you'd like more examples of the capability of the library, feel free to take
-a [look at some examples we have created](example.md).
+a [look at some examples we have created](examples.md).
+And if you'd like to take a look at all the available calls, feel free to take a
+[look at the API reference](api_reference.md).
 
 ```python
 from pathlib import Path
@@ -67,16 +74,16 @@ class T3DN_PT_bip_panel(bpy.types.Panel):
 
     def draw(self, context):
 
+        bip = PREVIEW_COLL['images']
+
         # NOTE: Ensure the .bip images are in the `images' folder.
         images = Path(__file__).resolve().parent.joinpath('images')
         images = images.glob('*.bip')
 
-        bip = PREVIEW_COLL['images']
-
         layout = self.layout
         grid = layout.grid_flow()
 
-        # Loop throug the images in the folder and draw them
+        # Loop through the images in the folder and draw them
         for item in images:
             image = str(item)
             try:
@@ -84,10 +91,7 @@ class T3DN_PT_bip_panel(bpy.types.Panel):
             except KeyError:
                 icon = bip.load(image, image, 'IMAGE')
 
-            grid.template_icon(
-                icon_value=icon.icon_id,
-                scale=13.2,
-            )
+            grid.template_icon(icon_value=icon.icon_id, scale=13.2)
 
 
 # Empty dictionary to hold the preview collections
