@@ -14,75 +14,83 @@ edit_uri: ""
 # Copyright
 copyright: Copyright &copy; 2021 3D Ninjas GmbH
 
-theme: readthedocs
-# theme:
-#     name: material
+# theme: readthedocs
+# nav:
+#   - Overview: index.md
+#   - Getting Started: getting_started.md
+#   - Examples: examples.md
+#   - Converter: converter.md
+#   - API Reference: api_reference.md
 
-#     # Don't include MkDocs' JavaScript
-#     include_search_page: false
-#     search_index_only: true
 
-#     palette:
-#         # Light mode
-#         - media: "(prefers-color-scheme: light)"
-#           scheme: default
-#           primary: indigo
-#           accent: indigo
-#           toggle:
-#               icon: material/toggle-switch-off-outline
-#               name: Switch to dark mode
+theme:
+    name: material
 
-#         # Dark mode
-#         - media: "(prefers-color-scheme: dark)"
-#           scheme: slate
-#           primary: red
-#           accent: red
-#           toggle:
-#               icon: material/toggle-switch
-#               name: Switch to light mode
+    # Don't include MkDocs' JavaScript
+    include_search_page: false
+    search_index_only: true
 
-#     language: en
-#     font:
-#         text: Roboto
-#         code: Roboto Mono
-#     # favicon: assets/favicon.png
-#     icon:
-#         repo: fontawesome/brands/github-alt
+    palette:
+        # Light mode
+        - media: "(prefers-color-scheme: light)"
+          scheme: default
+          primary: white
+          accent: white
+          toggle:
+              icon: material/toggle-switch-off-outline
+              name: Switch to dark mode
 
-#     features:
-#         - search.suggest
-#         - search.highlight
-#         - navigation.tracking
-#         - navigation.sections
+        # Dark mode
+        - media: "(prefers-color-scheme: dark)"
+          scheme: slate
+          primary: white
+          accent: white
+          toggle:
+              icon: material/toggle-switch
+              name: Switch to light mode
 
-# extra:
-#     social:
-#         - icon: fontawesome/brands/github
-#           link: https://github.com/3dninjas/
-#         - icon: fontawesome/brands/twitter
-#           link: https://twitter.com/3d_ninjas
-#         - icon: fontawesome/brands/linkedin
-#           link: https://www.linkedin.com/company/3dninjas/about/
+    language: en
+    font:
+        text: Roboto
+        code: Roboto Mono
+    # favicon: assets/favicon.png
+    icon:
+        repo: fontawesome/brands/github-alt
+
+    features:
+        - search.suggest
+        - search.highlight
+        - navigation.tracking
+        - navigation.sections
+
+extra:
+    social:
+        - icon: fontawesome/brands/github
+          link: https://github.com/3dninjas/
+        - icon: fontawesome/brands/twitter
+          link: https://twitter.com/3d_ninjas
+        - icon: fontawesome/brands/linkedin
+          link: https://www.linkedin.com/company/3dninjas/about/
 
 # Page navigation
 nav:
-  - Getting Started:
-    - Overview: index.md
-    - Getting Started: getting_started.md
-    - Example: example.md
-    - Converter: converter.md
+  - Overview: index.md
+  - Getting Started: getting_started.md
+  - Examples: examples.md
+  - Converter: converter.md
+  - API Reference: api_reference.md
 
-# markdown_extensions:
-#     - admonition
-#     - attr_list
-#     - def_list
-#     - pymdownx.mark
-#     - pymdownx.tabbed
-#     - pymdownx.details
-#     - pymdownx.highlight
-#     - pymdownx.inlinehilite
-#     - pymdownx.snippets
-#     - pymdownx.superfences
-#     - pymdownx.emoji:
-#           emoji_index: !!python/name:materialx.emoji.twemoji
-#           emoji_generator: !!python/name:materialx.emoji.to_svg
+markdown_extensions:
+    - admonition
+    - attr_list
+    - def_list
+    - pymdownx.mark
+    - pymdownx.tabbed
+    - pymdownx.details
+    - pymdownx.highlight
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
+    - pymdownx.superfences
+    - pymdownx.emoji:
+          emoji_index: !!python/name:materialx.emoji.twemoji
+          emoji_generator: !!python/name:materialx.emoji.to_svg
