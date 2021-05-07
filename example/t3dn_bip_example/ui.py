@@ -46,9 +46,6 @@ class T3DN_PT_bip_example_panel(bpy.types.Panel):
             text='Load JPG Enum Icons',
         ).type = 'jpg'
 
-        col.operator('t3dn.bip_example_load_alpha')
-
-        col.operator('t3dn.bip_example_load_misc')
         col.operator(
             't3dn.bip_example_hero_image',
             text='BIP Hero Image Preview',
@@ -58,6 +55,9 @@ class T3DN_PT_bip_example_panel(bpy.types.Panel):
             't3dn.bip_example_hero_image',
             text='JPG Hero Image Preview',
         ).type = 'jpg'
+
+        col.operator('t3dn.bip_example_load_alpha')
+        col.operator('t3dn.bip_example_load_misc')
 
 
 classes = (T3DN_PT_bip_example_panel,)
