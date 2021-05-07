@@ -21,6 +21,11 @@ except ImportError:
 
 def support_pillow() -> bool:
     '''Check whether Pillow is installed.'''
+    global Image
+
+    if not Image and 'PIL' in sys.modules:
+        from PIL import Image
+
     return bool(Image)
 
 
