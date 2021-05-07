@@ -16,7 +16,7 @@ new():
             value is True.
 
     Returns:
-        ImagePreviewCollection
+        An object of type ImagePreviewCollection.
 ```
 
 ```
@@ -58,14 +58,14 @@ class ImagePreviewCollection:
             Return preview names.
 
         Returns:
-            An object of typeKeysView[str].
+            An object of type KeysView[str].
 
     values():
         Description:
             Return previews.
 
         Returns:
-            An object of typeValuesView[ImagePreview].
+            An object of type ValuesView[ImagePreview].
 
     items():
         Description:

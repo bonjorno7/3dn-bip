@@ -1,5 +1,3 @@
-# TODO: Fix theme
-
 # Project information
 site_name: 3D Ninjas | Blender Image Preview
 site_url: https://3dninjas.github.io/3dn-bip/
@@ -13,15 +11,6 @@ edit_uri: ""
 
 # Copyright
 copyright: Copyright &copy; 2021 3D Ninjas GmbH
-
-# theme: readthedocs
-# nav:
-#   - Overview: index.md
-#   - Getting Started: getting_started.md
-#   - Examples: examples.md
-#   - Converter: converter.md
-#   - API Reference: api_reference.md
-
 
 theme:
     name: material
@@ -76,9 +65,8 @@ extra:
 nav:
   - Overview: index.md
   - Getting Started: getting_started.md
-  - Examples: examples.md
-  - Converter: converter.md
   - API Reference: api_reference.md
+  - Examples: examples.md
 
 markdown_extensions:
     - admonition
