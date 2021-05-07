@@ -2,25 +2,66 @@
 
 To get started, you will either have to:
 
+### BIP
+
 -   Download the repository and copy the `t3dn_bip` folder within the package
     to a folder within your addon.
--   Download the library from pip, find it's location and copy the `t3dn_bip`
+-   Download the library from `pip`, find it's location and copy the `t3dn_bip`
     folder to a folder within your addon.
+
+### BIP Converter
+
+-   Get the converter from `pip`, you can get the resource using the relevant
+    link from below.
 
 ### Links
 
--   Github Repository: [https://github.com/3dninjas/3dn-bip]()
--   PIP/PyPI Project: [https://pypi.org/project/t3dn-bip/]()
+-   BIP (Github Repository): [https://github.com/3dninjas/3dn-bip/](https://github.com/3dninjas/3dn-bip/)
+-   BIP (PIP/PyPI Project): [https://pypi.org/project/t3dn-bip/](https://pypi.org/project/t3dn-bip/)
+-   BIP Converter (PIP/PyPI Project): [https://pypi.org/project/t3dn-bip-converter/](https://pypi.org/project/t3dn-bip-converter/)
+
+---
+
+## Creating `.bip` Images
+
+In order to get the best results out of the library, we recommend using the
+`.bip` format. Once you have the [BIP Converter](https://pypi.org/project/t3dn-bip-converter/)
+installed, right click and download the images below.
+
+![Image 0](\images\image0.jpg)
+![Image 1](\images\image1.jpg)
+![Image 2](\images\image2.jpg)
+
+After the images are downloaded, follow the steps below to convert the images to
+the `.bip` format.
+
+## BIP Converter
+
+Once you have the converter, get the absolute path to the image you would like
+to convert an image, you have two options for the operation to be tackled:
+
+-   Convert to `.bip`, this is done by passing the path to the original image as
+    a single arguement
+    ```
+    python -m t3dn_bip_converter source_file.png
+    ```
+-   Convert to a [`Pillow`](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html)
+    supported format, this is done by passing the path to the original image as
+    the first argument and the path to the location of the converted image with
+    it's respective extension.
+    ```
+    python -m t3dn_bip_converter source_file.png destination_file.bip
+    ```
 
 ---
 
 ## Example
 
-We have provided an example to help you get acquainted with BIP. In order
-for this example to work on your machine, you will need to match the folder
-structure below or adjust the code to work for your own example.
-
-<!-- TODO: Find a way to make the three images below accessible to the user -->
+In addition to the images, we have provided an example to help you get
+acquainted with BIP. In order for this example to work on your machine, you will
+need to match the folder structure below or adjust the code to work for your own
+example. Use the images we converted and paste them in the relevant `images`
+folder.
 
 ```
 __init__.py
@@ -99,7 +140,7 @@ PREVIEW_COLL = {}
 
 
 def register():
-    global FOLDER, PREVIEW_COLL
+    global PREVIEW_COLL
 
     # Preview collection to store 256 by 256 images
     PREVIEW_COLL['images'] = previews.new(max_size=(256, 256), lazy_load=True)
@@ -108,7 +149,7 @@ def register():
 
 
 def unregister():
-    global FOLDER, PREVIEW_COLL
+    global PREVIEW_COLL
 
     bpy.utils.unregister_class(T3DN_PT_bip_panel)
 
