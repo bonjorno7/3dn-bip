@@ -26,16 +26,17 @@ def support_pillow() -> bool:
 
 def install_pillow() -> bool:
     '''Install Pillow and import the Image module.'''
-    command = [sys.executable, '-m', 'ensurepip']
-    options = ['--user', '--upgrade', '--default-pip']
+    if Path(sys.executable).stem.lower() == 'python':
+        exe = sys.executable
+    else:
+        exe = bpy.app.binary_path_python
 
-    if subprocess.call(args=command + options, timeout=60 * 10):
+    args = [exe, '-m', 'ensurepip', '--user', '--upgrade', '--default-pip']
+    if subprocess.call(args=args, timeout=600):
         return False
 
-    command = [sys.executable, '-m', 'pip']
-    options = ['install', '--user', '--upgrade', 'Pillow']
-
-    if subprocess.call(args=command + options, timeout=60 * 10):
+    args = [exe, '-m', 'pip', 'install', '--user', '--upgrade', 'Pillow']
+    if subprocess.call(args=args, timeout=600):
         return False
 
     name = 'PIL'
