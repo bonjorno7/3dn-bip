@@ -30,6 +30,7 @@ class ImagePreviewCollection:
                 print('-   Other images load in 256x256 (Blender standard).')
 
         self._collection = bpy.utils.previews.new()
+        self._fallback_collection = bpy.utils.previews.new()
         self._max_size = max_size
         self._lazy_load = lazy_load
 
@@ -137,6 +138,9 @@ class ImagePreviewCollection:
         '''Load image contents from file and load preview.'''
         data = load_file(filepath, self._max_size)
 
+        if not data:
+            return self._load_fallback(name, filepath, 'IMAGE')
+
         preview = self.new(name)
         preview.icon_size = data['icon_size']
         preview.icon_pixels = data['icon_pixels']
@@ -151,6 +155,13 @@ class ImagePreviewCollection:
             data = load_file(filepath, self._max_size)
 
         if not event.is_set():
+            if data:
+                data['succeeded'] = True
+            else:
+                data = {
+                    'succeeded': False,
+                    'filepath': filepath,
+                }
             self._queue.put((name, data, event))
 
     def _timer(self):
@@ -185,10 +196,19 @@ class ImagePreviewCollection:
         if not event.is_set():
             if name in self:
                 preview = self[name]
-                preview.icon_size = data['icon_size']
-                preview.icon_pixels = data['icon_pixels']
-                preview.image_size = data['image_size']
-                preview.image_pixels = data['image_pixels']
+                if data['succeeded']:
+                    preview.icon_size = data['icon_size']
+                    preview.icon_pixels = data['icon_pixels']
+                    preview.image_size = data['image_size']
+                    preview.image_pixels = data['image_pixels']
+                else:
+                    print(f'WARNING: using fallback collection to load {data["filepath"]}')
+                    tmp = self._fallback_collection.load(name, data['filepath'], 'IMAGE')
+                    preview.icon_size = tmp.icon_size
+                    preview.icon_pixels = tmp.icon_pixels
+                    preview.image_size = tmp.image_size
+                    preview.image_pixels = tmp.image_pixels
+                    self._fallback_collection.pop(name)
 
     def clear(self):
         '''Clear all previews.'''
@@ -209,6 +229,7 @@ class ImagePreviewCollection:
                 bpy.app.timers.unregister(self._timer)
 
         self._collection.close()
+        self._fallback_collection.close()
 
     def _get_event(self) -> Event:
         '''Get the clear event, make one if necesssary.'''

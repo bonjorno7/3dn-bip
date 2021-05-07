@@ -122,37 +122,41 @@ def load_file(filepath: str, max_size: tuple) -> dict:
             }
 
     if support_pillow():
-        with Image.open(filepath) as image:
-            image = image.transpose(Image.FLIP_TOP_BOTTOM)
-            image = image.convert('RGBA').convert('RGBa')
+        try:
+            with Image.open(filepath) as image:
+                image = image.transpose(Image.FLIP_TOP_BOTTOM)
+                image = image.convert('RGBA').convert('RGBa')
 
-            if _should_resize(image.size, max_size):
-                image = _resize_image(image, max_size)
+                if _should_resize(image.size, max_size):
+                    image = _resize_image(image, max_size)
 
-            image_pixels = array('i', image.tobytes())
-            assert image_pixels.itemsize == 4, 'unexpected bytes per pixel'
-            length = image.size[0] * image.size[1]
-            assert len(image_pixels) == length, 'unexpected amount of pixels'
+                image_pixels = array('i', image.tobytes())
+                assert image_pixels.itemsize == 4, 'unexpected bytes per pixel'
+                length = image.size[0] * image.size[1]
+                assert len(image_pixels) == length, 'unexpected amount of pixels'
 
-            data = {
-                'icon_size': image.size,
-                'icon_pixels': image_pixels,
-                'image_size': image.size,
-                'image_pixels': image_pixels,
-            }
+                data = {
+                    'icon_size': image.size,
+                    'icon_pixels': image_pixels,
+                    'image_size': image.size,
+                    'image_pixels': image_pixels,
+                }
 
-            if _should_resize(image.size, (32, 32)):
-                icon = image.resize(size=(32, 32))
+                if _should_resize(image.size, (32, 32)):
+                    icon = image.resize(size=(32, 32))
 
-                icon_pixels = array('i', icon.tobytes())
-                assert icon_pixels.itemsize == 4, 'unexpected bytes per pixel'
-                length = icon.size[0] * icon.size[1]
-                assert len(icon_pixels) == length, 'unexpected amount of pixels'
+                    icon_pixels = array('i', icon.tobytes())
+                    assert icon_pixels.itemsize == 4, 'unexpected bytes per pixel'
+                    length = icon.size[0] * icon.size[1]
+                    assert len(icon_pixels) == length, 'unexpected amount of pixels'
 
-                data['icon_size'] = icon.size
-                data['icon_pixels'] = icon_pixels
+                    data['icon_size'] = icon.size
+                    data['icon_pixels'] = icon_pixels
 
-            return data
+                return data
+        except Exception as e:
+            print(f'ERROR: pillow failed for {filepath}: {str(e)}')
+            return None
 
     raise ValueError('input is not a supported file format')
 
