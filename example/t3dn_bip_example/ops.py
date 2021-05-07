@@ -1,6 +1,6 @@
 import bpy
-from typing import List, Tuple
 from .t3dn_bip.ops import InstallPillow
+from . import enum_lists
 from . import previews
 from . import utils
 
@@ -112,26 +112,6 @@ class T3DN_OT_bip_example_load_misc(bpy.types.Operator):
         return {'FINISHED'}
 
 
-icon_items: List[Tuple[str, str, str]] = []
-
-
-def get_icon_items(self, context: bpy.types.Context):
-    paths = previews.folder.joinpath(self.type).glob(f'*.{self.type}')
-    coll = previews.PREVIEW_COLL['images']
-
-    icon_items.clear()
-
-    for index, path in enumerate(list(paths)):
-        try:
-            icon = coll[str(path)]
-        except KeyError:
-            icon = coll.load(str(path), str(path), 'IMAGE')
-
-        icon_items.append((path.name, path.name, '', icon.icon_id, index))
-
-    return icon_items
-
-
 class T3DN_OT_bip_example_template_icon_view(bpy.types.Operator):
     bl_idname = 't3dn.bip_example_template_icon_view'
     bl_label = 'Template Icon View'
@@ -139,7 +119,7 @@ class T3DN_OT_bip_example_template_icon_view(bpy.types.Operator):
     bl_options = {'REGISTER', 'INTERNAL'}
 
     type: bpy.props.StringProperty()
-    icons: bpy.props.EnumProperty(items=get_icon_items)
+    icons: bpy.props.EnumProperty(items=enum_lists.temp_icon_example)
 
     def invoke(self, context: bpy.types.Context, event: bpy.types.Event) -> set:
         return context.window_manager.invoke_popup(self, width=120)
@@ -166,12 +146,12 @@ class T3DN_OT_bip_example_hero_image(bpy.types.Operator):
 
     def invoke(self, context: bpy.types.Context, event: bpy.types.Event) -> set:
         path = previews.folder.joinpath('hero', f'sunset.{self.type}')
-        coll = previews.PREVIEW_COLL['hero']
+        coll = previews.collection_hero
 
-        try:
-            self.icon = coll[str(path)]
-        except KeyError:
-            self.icon = coll.load(str(path), str(path), 'IMAGE')
+        if event.shift:
+            coll.clear()
+
+        self.icon = coll.load_safe(str(path), str(path), 'IMAGE')
 
         x_loc = event.mouse_x
         y_loc = event.mouse_y

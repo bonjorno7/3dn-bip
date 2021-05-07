@@ -16,7 +16,7 @@ class T3DN_PT_bip_example_panel(bpy.types.Panel):
         col.scale_y = 1.2
 
         text = 'Update Pillow' if support_pillow() else 'Install Pillow'
-        layout.operator('t3dn.bip_example_install_pillow', text=text)
+        col.operator('t3dn.bip_example_install_pillow', text=text)
 
         col = layout.column(align=True)
         col.scale_y = 1.2
