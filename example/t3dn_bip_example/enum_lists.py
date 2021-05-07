@@ -2,8 +2,8 @@ import bpy
 from typing import List, Tuple
 from . import previews
 
-# We do this on a global level to bypass the dynamic enum bug
-icon_items: List[Tuple[str, str, str]] = []
+# We do this on a global level to bypass the dynamic enum bug.
+icon_items: List[Tuple[str, str, str, int, int]] = []
 
 
 def temp_icon_example(self, context: bpy.types.Context):
