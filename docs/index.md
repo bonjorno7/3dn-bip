@@ -49,11 +49,11 @@ Use of Python's [`Pillow`](https://pypi.org/project/Pillow/) library to
 quickly process images that you do not have control over. A use case for this
 would be if your addon allows for users to load their own images or from an
 external software, you would not have control as to how big they. In such a
-case, you should prompt the user to use the built-in operator to install
-[`Pillow`](https://pypi.org/project/Pillow/). If it's not installed then the
-library will default to Blender's standard preview service.
-
-<!-- TODO: Document the API reference with the call for the install Pillow operator -->
+case, you will need to use the built-in base class for an operator that is
+provided by the library to create your own operator to install
+[`Pillow`](https://pypi.org/project/Pillow/). If the user does not opt into
+using this operator, then the library will default to Blender's standard preview
+service.
 
 ---
 
@@ -75,8 +75,9 @@ library will default to Blender's standard preview service.
 
 -   Support for loading previews that are out of your control with the use of
     the [`Pillow`](https://pypi.org/project/Pillow/) library. The library comes
-    with a built in operator that handles this for the developer.
-    <!-- TODO: Document the API reference with the call for the install Pillow operator -->
+    with a built-in base class for an operator for you to create your own
+    operator to install [`Pillow`](https://pypi.org/project/Pillow/). How to
+    take advantage of this is covered in **[Getting Started](getting_started.md)**.
 
 -   Pre-set safety when loading previews, instead of using the `load()` method,
     you can opt to use the `load_safe()` method. The same is the case for the
