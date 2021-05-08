@@ -63,7 +63,7 @@ library will default to Blender's standard preview service.
     `(bpy.utils.previews)`.
 -   Use of an optimized format for loading previews.
 -   Load arbitrarily sized images, you are not locked with Blender's default
-    maximum of 256px by 256px.
+    maximum of `256px by 256px`.
 -   Support for lazy and eager loading of previews.
 
     -   Lazy loading is the recommended method of loading previews as it allows
