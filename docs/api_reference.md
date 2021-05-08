@@ -9,6 +9,9 @@ a unique `bl_idname` for the class. An example of how this can be achieved is as
 follows.
 
 ```
+import bpy
+from .t3dn_bip.ops import InstallPillow
+
 class T3DN_OT_bip_install_pillow(bpy.types.Operator, InstallPillow):
     bl_idname = 't3dn.bip_install_pillow'
 ```
