@@ -62,8 +62,14 @@ def install_pillow() -> bool:
 def can_load(filepath: str) -> bool:
     '''Return whether an image can be loaded.'''
     with open(filepath, 'rb') as bip:
-        if bip.read(4) == b'BIP2':
+        head4 = bip.read(4)
+        if head4 == b'BIP2':
             return True
+        # Pillow support for JPEG seems to be problematic on non-windows platforms
+        if sys.platform != 'win32':
+            if head4[:2] == b'\xff\xd8':
+                print(f'WARNING: deliberately not loading JPEG with Pillow - {filepath}')
+                return False
 
     return support_pillow()
 
