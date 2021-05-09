@@ -5,7 +5,7 @@ on:
         branches:
             - publish
 jobs:
-    docs:
+    ghpages:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/setup-python@v2
