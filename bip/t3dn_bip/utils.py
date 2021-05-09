@@ -7,35 +7,62 @@ import importlib.util
 from pathlib import Path
 from zlib import decompress
 from array import array
+from .formats import BIP2_MAGIC, PILLOW_FORMATS
 
 USER_SITE = site.getusersitepackages()
 
 if USER_SITE not in sys.path:
     sys.path.append(USER_SITE)
 
-try:
-    from PIL import Image
-except ImportError:
-    Image = None
+
+Image = None
+format_supported = {}
+
+
+def _try_import_pillow():
+    global Image
+    try:
+        if not Image:
+            from PIL import Image
+            for name, spec in PILLOW_FORMATS.items():
+                supported = True
+                for test in spec.tests:
+                    try:
+                        with Image.open(io.BytesIO(test)) as image:
+                            image.convert('RGBA')
+                    except:
+                        supported = False
+                format_supported[name] = supported
+        return True
+    except ImportError:
+        return False
+
+
+_try_import_pillow()
 
 
 def support_pillow() -> bool:
     '''Check whether Pillow is installed.'''
-    return bool(Image)
+    return _try_import_pillow()
+
+
+def unsupported_formats():
+    return [name for name, supported in format_supported.items() if not supported]
 
 
 def install_pillow() -> bool:
     '''Install Pillow and import the Image module.'''
-    command = [sys.executable, '-m', 'ensurepip']
-    options = ['--user', '--upgrade', '--default-pip']
+    if 'python' in Path(sys.executable).stem.lower():
+        exe = sys.executable
+    else:
+        exe = bpy.app.binary_path_python
 
-    if subprocess.call(args=command + options, timeout=60 * 10):
+    args = [exe, '-m', 'ensurepip', '--user', '--upgrade', '--default-pip']
+    if subprocess.call(args=args, timeout=600):
         return False
 
-    command = [sys.executable, '-m', 'pip']
-    options = ['install', '--user', '--upgrade', 'Pillow']
-
-    if subprocess.call(args=command + options, timeout=60 * 10):
+    args = [exe, '-m', 'pip', 'install', '--user', '--upgrade', 'Pillow']
+    if subprocess.call(args=args, timeout=600):
         return False
 
     name = 'PIL'
@@ -47,19 +74,31 @@ def install_pillow() -> bool:
     sys.modules[module.__name__] = module
     spec.loader.exec_module(module)
 
-    global Image
-    from PIL import Image
-
-    return True
+    return _try_import_pillow()
 
 
 def can_load(filepath: str) -> bool:
     '''Return whether an image can be loaded.'''
     with open(filepath, 'rb') as bip:
-        if bip.read(4) == b'BIP2':
+        # Read head for magic detection.
+        head = bip.read(
+            max(
+                len(BIP2_MAGIC),
+                max([len(spec.magic) for spec in PILLOW_FORMATS.values()]),
+            )
+        )
+
+        # We support BIP2.
+        if head[:len(BIP2_MAGIC)] == BIP2_MAGIC:
             return True
 
-    return support_pillow()
+        # In case we have Pillow support, lets find out if we support the file format.
+        if support_pillow():
+            for name, spec in PILLOW_FORMATS.items():
+                if head[:len(spec.magic)] == spec.magic:
+                    return format_supported[name]
+
+    return False
 
 
 def load_file(filepath: str, max_size: tuple) -> dict:
@@ -78,7 +117,7 @@ def load_file(filepath: str, max_size: tuple) -> dict:
         ValueError: If file is not BIP and Pillow is not installed.
     '''
     with open(filepath, 'rb') as bip:
-        if bip.read(4) == b'BIP2':
+        if bip.read(4) == BIP2_MAGIC:
             count = int.from_bytes(bip.read(1), 'big')
             assert count > 0, 'the file contains no images'
 

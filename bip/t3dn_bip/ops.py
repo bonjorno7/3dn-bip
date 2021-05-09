@@ -18,8 +18,8 @@ class InstallPillow:
 
     def execute(self: bpy.types.Operator, context: bpy.types.Context) -> set:
         if install_pillow():
-            self.report({'INFO'}, 'Pillow was installed successfully')
+            self.report({'INFO'}, 'Successfully installed Pillow')
         else:
-            self.report({'WARNING'}, 'Pillow failed to install')
+            self.report({'WARNING'}, 'Failed to install Pillow')
 
         return {'FINISHED'}
