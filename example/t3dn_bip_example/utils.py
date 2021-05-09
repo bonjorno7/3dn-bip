@@ -1,7 +1,9 @@
+from typing import Union
+
 import bpy
 
 
-def get_scale_from_res(resolution: int) -> int:
+def get_scale_from_res(resolution: int) -> Union[int, float]:
     '''
     Get a Blender scale value from a given resolution. This only works for a
     `ui_scale` of 1 and greater.

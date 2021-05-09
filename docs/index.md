@@ -1,11 +1,12 @@
 ## About
 
-**Blender Image Preview**, or **BIP** for short is a **[Blender](https://blender.org)**
-library by 3D Ninjas that allows addon developers to have extra functionality
-that would take quite some time for them to set up on their own. `.bip` is a
-format designed to be 100% compatible with the Blender in-memory format of these
-objects. It primarily guarantees, that we can just read the data from the file
-and copy it without any modifications in the right buffer.
+**Blender Image Preview**, or **BIP** for short is a
+[Blender](https://blender.org) library by 3D Ninjas that allows addon developers
+to have extra functionality that would take quite some time for them to set up
+on their own. `.bip` is a format designed to be 100% compatible with the Blender
+in-memory format of these objects. It primarily guarantees, that we can just
+read the data from the file and copy it without any modifications in the right
+buffer.
 
 ### Origin
 
@@ -59,7 +60,7 @@ service.
 
 ## Features
 
--   Drop-In replacement for the standard Blender preview library
+-   Drop-in replacement for the standard Blender preview library
     `(bpy.utils.previews)`.
 -   Use of an optimized format for loading previews.
 -   Load arbitrarily sized images, you are not locked with Blender's default
@@ -83,6 +84,12 @@ service.
     you can opt to use the `load_safe()` method. The same is the case for the
     `new()` method. This allows you to focus on loading your previews and less
     on whether you need to provide a safety check.
+
+-   Being a drop-in replacement for `bpy.utils.previews` the library maintains
+    support for the standard Blender loading behaviour of other file types that
+    are not compatible with `BIP`. Their items are in the enum
+    `[‘MOVIE’, ‘BLEND’, ‘FONT’]`. This is covered in the
+    [`API Reference`](api_reference.md).
 
 ## Warnings
 
