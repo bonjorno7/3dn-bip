@@ -7,47 +7,39 @@ import importlib.util
 from pathlib import Path
 from zlib import decompress
 from array import array
-from .formats import BIP2_MAGIC, PILLOW_FORMATS
+from .formats import test_formats, BIP_FORMATS, PIL_FORMATS, MAGIC_LENGTH
 
 USER_SITE = site.getusersitepackages()
 
 if USER_SITE not in sys.path:
     sys.path.append(USER_SITE)
 
-
 Image = None
-format_supported = {}
 
 
-def _try_import_pillow():
+def _import_pillow():
+    '''Import Pillow and test which formats are supported.'''
     global Image
+
     try:
-        if not Image:
-            from PIL import Image
-            for name, spec in PILLOW_FORMATS.items():
-                supported = True
-                for test in spec.tests:
-                    try:
-                        with Image.open(io.BytesIO(test)) as image:
-                            image.convert('RGBA')
-                    except:
-                        supported = False
-                format_supported[name] = supported
-        return True
+        from PIL import Image
     except ImportError:
-        return False
+        pass
+    else:
+        test_formats()
 
 
-_try_import_pillow()
+_import_pillow()
 
 
 def support_pillow() -> bool:
     '''Check whether Pillow is installed.'''
-    return _try_import_pillow()
+    global Image
 
+    if not Image:
+        _import_pillow()
 
-def unsupported_formats():
-    return [name for name, supported in format_supported.items() if not supported]
+    return bool(Image)
 
 
 def install_pillow() -> bool:
@@ -74,29 +66,28 @@ def install_pillow() -> bool:
     sys.modules[module.__name__] = module
     spec.loader.exec_module(module)
 
-    return _try_import_pillow()
+    return support_pillow()
 
 
 def can_load(filepath: str) -> bool:
     '''Return whether an image can be loaded.'''
-    with open(filepath, 'rb') as bip:
-        # Read head for magic detection.
-        head = bip.read(
-            max(
-                len(BIP2_MAGIC),
-                max([len(spec.magic) for spec in PILLOW_FORMATS.values()]),
-            )
-        )
+    # Read magic for format detection.
+    with open(filepath, 'rb') as file:
+        magic = file.read(MAGIC_LENGTH)
 
-        # We support BIP2.
-        if head[:len(BIP2_MAGIC)] == BIP2_MAGIC:
+    # We support BIP (currently only BIP2).
+    for spec in BIP_FORMATS.values():
+        if magic.startswith(spec.magic):
             return True
 
-        # In case we have Pillow support, lets find out if we support the file format.
-        if support_pillow():
-            for name, spec in PILLOW_FORMATS.items():
-                if head[:len(spec.magic)] == spec.magic:
-                    return format_supported[name]
+    # If Pillow is not installed, we don't support other formats.
+    if not support_pillow():
+        return False
+
+    # If Pillow is installed, find out if we support this format.
+    for spec in PIL_FORMATS.values():
+        if magic.startswith(spec.magic):
+            return spec.supported
 
     return False
 
@@ -117,7 +108,7 @@ def load_file(filepath: str, max_size: tuple) -> dict:
         ValueError: If file is not BIP and Pillow is not installed.
     '''
     with open(filepath, 'rb') as bip:
-        if bip.read(4) == BIP2_MAGIC:
+        if bip.read(4) == BIP_FORMATS['BIP2'].magic:
             count = int.from_bytes(bip.read(1), 'big')
             assert count > 0, 'the file contains no images'
 

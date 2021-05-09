@@ -8,7 +8,8 @@ from queue import Queue
 from traceback import print_exc
 from time import time
 from typing import ItemsView, Iterator, KeysView, ValuesView
-from .utils import support_pillow, unsupported_formats, can_load, load_file, tag_redraw
+from .utils import support_pillow, can_load, load_file, tag_redraw
+from .formats import unsupported_formats
 
 WARNINGS = True
 
@@ -21,21 +22,25 @@ class ImagePreviewCollection:
         if WARNINGS:
             if not support_pillow():
                 print('Pillow is not installed, therefore:')
-                print('-   BIP images load without scaling.')
+                print('- BIP images load without scaling.')
 
                 if lazy_load:
-                    print('-   Other images load slowly (Blender standard).')
+                    print('- Other images load slowly (Blender standard).')
                 if lazy_load and max_size != (128, 128):
-                    print('-   Other images load in 128x128 (Blender standard).')
+                    print('- Other images load in 128x128 (Blender standard).')
                 elif not lazy_load and max_size != (256, 256):
-                    print('-   Other images load in 256x256 (Blender standard).')
+                    print('- Other images load in 256x256 (Blender standard).')
 
             else:
                 unsupported = unsupported_formats()
                 if unsupported:
                     print('Pillow is installed, but:')
+
                     for name in unsupported:
-                        print(f'-   {name} images are not supported by Pillow and load slowly (Blender standard).')
+                        print(
+                            f'- {name} images are not supported by Pillow',
+                            'and load slowly (Blender standard).',
+                        )
 
         self._collection = bpy.utils.previews.new()
         self._max_size = max_size
