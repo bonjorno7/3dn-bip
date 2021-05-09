@@ -25,6 +25,27 @@ jobs:
                         draft: false,
                         prerelease: false,
                       });
-                      console.log(`::set-output name=release_id::${release.id}`);
+                      return release.id;
+                  result-encoding: string
               id: create-release
 
+            - name: Export library
+              run: |
+                  git archive -o ./t3dn_bip.zip HEAD:bip/t3dn_bip
+                  curl \
+                      --data-binary @"t3dn_bip.zip" \
+                      -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                      -H "Content-Type: application/octet-stream" \
+                      "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create-release.outputs.result }}/assets?name=t3dn_bip.zip"
+
+            - name: Export examples
+              run: |
+                  for example in "t3dn_bip_showcase";
+                  do
+                      git archive -o ./${example}.zip HEAD:example/${example}
+                      curl \
+                          --data-binary @"${example}.zip" \
+                          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                          -H "Content-Type: application/octet-stream" \
+                          "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create-release.outputs.result }}/assets?name=${example}.zip"
+                  done
