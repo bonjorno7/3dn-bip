@@ -4,7 +4,6 @@ from pathlib import Path
 from PIL import Image
 from zlib import compress, decompress
 
-
 _BIP2_MAGIC = b'BIP2'
 
 
