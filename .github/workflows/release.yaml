@@ -1,0 +1,27 @@
+name: Release
+
+on:
+    push:
+        branches:
+            - publish
+jobs:
+    docs:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Create release
+              uses: actions/github-script@v4
+              with:
+                  id: create-release
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                      const version = require('fs').readFileSync('.version', 'utf8');
+                      const { data: release } = await github.repos.createRelease({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        tag_name: 'v' + version,
+                        target_commitish: '${{ github.sha }}',
+                        name: 'v' + version,
+                        draft: false,
+                        prerelease: false,
+                      });
+                      console.log(`::set-output name=release_id::${release.id}`);
