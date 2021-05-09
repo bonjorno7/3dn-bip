@@ -19,9 +19,7 @@ jobs:
 
             - name: Build docs
               working-directory: current
-              run: |
-                  pip install mkdocs mkdocs-material
-                  mkdocs build -c -d build_docs/
+              run: ./build_docs.sh --install-requirements
 
             - name: Checkout gh-pages branch
               uses: actions/checkout@v2

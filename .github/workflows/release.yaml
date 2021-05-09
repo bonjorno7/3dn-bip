@@ -9,10 +9,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
+
             - name: Create release
               uses: actions/github-script@v4
               with:
-                  id: create-release
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   script: |
                       const version = require('fs').readFileSync('.version', 'utf8').trim();
@@ -26,3 +26,5 @@ jobs:
                         prerelease: false,
                       });
                       console.log(`::set-output name=release_id::${release.id}`);
+              id: create-release
+
