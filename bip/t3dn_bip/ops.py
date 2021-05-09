@@ -1,5 +1,5 @@
 import bpy
-from .utils import support_pillow, install_pillow
+from .utils import install_pillow
 
 
 class InstallPillow:
@@ -10,19 +10,16 @@ class InstallPillow:
     -   Make sure to set bl_idname, it must be unique.
     '''
     bl_label = 'Install Pillow'
-    bl_description = 'Install the Python Imaging Library'
+    bl_description = '.\n'.join((
+        'Install the Python Imaging Library',
+        'This could take a few minutes',
+    ))
     bl_options = {'REGISTER', 'INTERNAL'}
 
     def execute(self: bpy.types.Operator, context: bpy.types.Context) -> set:
-        if support_pillow():
-            self.report({'INFO'}, 'Pillow is already installed')
-            return {'CANCELLED'}
+        if install_pillow():
+            self.report({'INFO'}, 'Successfully installed Pillow')
         else:
-            install_pillow()
+            self.report({'WARNING'}, 'Failed to install Pillow')
 
-        if support_pillow():
-            self.report({'INFO'}, 'Pillow was installed successfully')
-            return {'FINISHED'}
-        else:
-            self.report({'WARNING'}, 'Pillow failed to install')
-            return {'CANCELLED'}
+        return {'FINISHED'}

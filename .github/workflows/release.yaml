@@ -1,0 +1,44 @@
+name: Release
+
+on:
+    push:
+        branches:
+            - publish
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Create ZIP files
+              run: ./dist_zips.sh
+
+            - name: Create release
+              uses: actions/github-script@v4
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                      const version = require('fs').readFileSync('.version', 'utf8').trim();
+                      const { data: release } = await github.repos.createRelease({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        tag_name: 'v' + version,
+                        target_commitish: '${{ github.sha }}',
+                        name: 'v' + version,
+                        draft: false,
+                        prerelease: false,
+                      });
+                      return release.id;
+                  result-encoding: string
+              id: create-release
+
+            - name: Upload ZIP files
+              run: |
+                  for zip_file in $(find dist_zips -mindepth 1 -maxdepth 1 -type f -name "*.zip");
+                  do
+                      curl \
+                          --data-binary @"$zip_file" \
+                          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                          -H "Content-Type: application/octet-stream" \
+                          "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create-release.outputs.result }}/assets?name=$(basename "$zip_file")"
+                  done

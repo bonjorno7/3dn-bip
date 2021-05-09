@@ -4,6 +4,8 @@ from pathlib import Path
 from PIL import Image
 from zlib import compress, decompress
 
+_BIP2_MAGIC = b'BIP2'
+
 
 def convert_file(src: Union[str, Path], dst: Union[str, Path] = None):
     '''Convert between BIP and various image formats.'''
@@ -31,11 +33,14 @@ def _image_to_bip(src: Union[str, Path], dst: Union[str, Path]):
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
         image = image.convert('RGBA').convert('RGBa')
 
-        images = [image.resize(size=(32, 32)), image]
+        if image.size == (32, 32):
+            images = [image]
+        else:
+            images = [image.resize(size=(32, 32)), image]
         contents = [compress(image.tobytes()) for image in images]
 
         with open(dst, 'wb') as output:
-            output.write(b'BIP2')
+            output.write(_BIP2_MAGIC)
             output.write(len(images).to_bytes(1, 'big'))
 
             for image, content in zip(images, contents):
@@ -50,7 +55,7 @@ def _image_to_bip(src: Union[str, Path], dst: Union[str, Path]):
 def _bip_to_image(src: Union[str, Path], dst: Union[str, Path]):
     '''Convert BIP to various image formats.'''
     with open(src, 'rb') as bip:
-        if bip.read(4) != b'BIP2':
+        if bip.read(4) != _BIP2_MAGIC:
             raise ValueError('input is not a supported file format')
 
         count = int.from_bytes(bip.read(1), 'big')

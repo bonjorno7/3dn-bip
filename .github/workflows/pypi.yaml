@@ -1,0 +1,35 @@
+name: PyPI
+
+on:
+    push:
+        branches:
+            - publish
+jobs:
+    pypi:
+        name: Publish
+        runs-on: ubuntu-20.04
+        environment: publish
+        steps:
+            # prepare
+            - uses: actions/checkout@v2
+            - run: python3 -m pip install --user --upgrade build twine
+            # publish bip
+            - run: sed -i.bak -E "s/^__version__\s*=\s*.+$/__version__ = '$(cat ../.version | tr -d '[:space:]')'/" */__init__.py
+              working-directory: bip
+            - run: python3 -m build
+              working-directory: bip
+            - run: python3 -m twine upload dist/*
+              working-directory: bip
+              env:
+                  TWINE_USERNAME: __token__
+                  TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_BIP }}
+            # publish bip_converter
+            - run: sed -i.bak -E "s/^__version__\s*=\s*.+$/__version__ = '$(cat ../.version | tr -d '[:space:]')'/" */__init__.py
+              working-directory: bip_converter
+            - run: python3 -m build
+              working-directory: bip_converter
+            - run: python3 -m twine upload dist/*
+              working-directory: bip_converter
+              env:
+                  TWINE_USERNAME: __token__
+                  TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_BIP_CONVERTER }}
