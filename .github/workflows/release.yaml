@@ -15,7 +15,7 @@ jobs:
                   id: create-release
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   script: |
-                      const version = require('fs').readFileSync('.version', 'utf8');
+                      const version = require('fs').readFileSync('.version', 'utf8').trim();
                       const { data: release } = await github.repos.createRelease({
                         owner: context.repo.owner,
                         repo: context.repo.repo,
