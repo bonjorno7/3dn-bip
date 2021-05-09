@@ -158,9 +158,14 @@ class T3DN_OT_bip_example_hero_image(bpy.types.Operator):
         x_val = x_loc - (self.icon_size / 2)
         y_val = y_loc + 10
 
+        val1 = context.window.width - 100
+        val2 = context.window.height - 200
+        val3 = self.icon_size + 8
+        dlg_width = min(val1, val2, val3) / context.preferences.view.ui_scale
+
         context.window.cursor_warp(x_val, y_val)
         win_man = context.window_manager
-        return_value = win_man.invoke_popup(self, width=self.icon_size)
+        return_value = win_man.invoke_popup(self, width=dlg_width)
         context.window.cursor_warp(x_loc, y_loc)
 
         return return_value
