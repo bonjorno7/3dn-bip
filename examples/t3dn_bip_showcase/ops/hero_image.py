@@ -4,8 +4,8 @@ from .. import previews
 _HERO_WIDTH = 512
 
 
-class T3DN_OT_bip_example_hero_image(bpy.types.Operator):
-    bl_idname = 't3dn.bip_example_hero_image'
+class T3DN_OT_bip_showcase_hero_image(bpy.types.Operator):
+    bl_idname = 't3dn.bip_showcase_hero_image'
     bl_label = 'Hero Image Preview'
     bl_description = 'Draw a high quality hero image'
     bl_options = {'REGISTER', 'INTERNAL'}

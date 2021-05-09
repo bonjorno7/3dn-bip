@@ -40,18 +40,8 @@ python -m pip install t3dn-bip-converter
 Download the `.zip` from the link below to get the resources referenced in the
 example.
 
--   [BIP Getting Started](_resources\BIP.zip)
-
-The structure within the unziped folder is as follows.
-
-```
-__init__.py
-\t3dn_bip
-\images
-\images\image0.bip
-\images\image1.bip
-\images\image2.bip
-```
+- [Getting Started](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_getting_started.zip)
+- [Showcase](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_showcase.zip)
 
 If you'd like more examples of the capability of the library, feel free to
 [take a look at some examples we have created](examples.md). And if you'd like
@@ -62,53 +52,3 @@ The example draws three images that are of the optimized `.bip` format in a
 panel. Notice that the registration is a drop in replacement of the
 `bpy.utils.previews` module with an additional argument of `max_size`, one of
 the benefits of using the library.
-
-```python
-import bpy
-from pathlib import Path
-from .t3dn_bip import previews
-
-bl_info = {
-    "name": "BIP",
-    "author": "3D Ninjas",
-    "blender": (2, 83, 0),
-    "version": (0, 0, 1),
-}
-
-
-class T3DN_PT_bip_panel(bpy.types.Panel):
-    bl_label = "BIP Panel"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "3D Ninjas"
-
-    def draw(self, context):
-        layout = self.layout
-        grid = layout.grid_flow()
-
-        # Loop through the images in the folder and draw them
-        images = Path(__file__).resolve().parent.joinpath('images')
-        for item in images.glob('*.bip'):
-            icon = BIP.load_safe(str(item), str(item), 'IMAGE')
-            grid.template_icon(icon_value=icon.icon_id, scale=13.2)
-
-
-# Empty variable to hold the preview collections
-BIP = None
-
-
-def register():
-    # Create a preview collection to store 256 by 256 images
-    global BIP
-    BIP = previews.new(max_size=(256, 256))
-
-    bpy.utils.register_class(T3DN_PT_bip_panel)
-
-
-def unregister():
-    bpy.utils.unregister_class(T3DN_PT_bip_panel)
-
-    # Close the preview collection
-    global BIP
-    previews.remove(BIP)
-```

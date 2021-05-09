@@ -9,6 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
+            - run: sed -i -E "s/^__version__\s*=\s*.+$/__version__ = '$(cat .version | tr -d '[:space:]')'/" bip/t3dn_bip/__init__.py
 
             - name: Create ZIP files
               run: ./dist_zips.sh

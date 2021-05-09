@@ -2,8 +2,8 @@ import bpy
 from .. import previews
 
 
-class T3DN_OT_bip_example_load_previews(bpy.types.Operator):
-    bl_idname = 't3dn.bip_example_load_previews'
+class T3DN_OT_bip_showcase_load_previews(bpy.types.Operator):
+    bl_idname = 't3dn.bip_showcase_load_previews'
     bl_label = 'Load Previews'
     bl_description = '.\n'.join((
         'Load BIP or JPG image previews',

@@ -2,8 +2,8 @@ import bpy
 from .. import previews
 
 
-class T3DN_OT_bip_example_load_misc(bpy.types.Operator):
-    bl_idname = 't3dn.bip_example_load_misc'
+class T3DN_OT_bip_showcase_load_misc(bpy.types.Operator):
+    bl_idname = 't3dn.bip_showcase_load_misc'
     bl_label = 'Load Misc Previews'
     bl_description = '.\n'.join((
         'Load movie, blend, and font previews',
