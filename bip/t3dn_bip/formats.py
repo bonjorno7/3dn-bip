@@ -48,7 +48,7 @@ def _run_test(test: bytes) -> bool:
     try:
         with Image.open(BytesIO(b64decode(test))) as image:
             image.convert('RGBA')
-    except OSError:
+    except:
         return False
     else:
         return True

@@ -23,7 +23,7 @@ def _import_pillow():
 
     try:
         from PIL import Image
-    except ImportError:
+    except:
         pass
     else:
         test_formats()
