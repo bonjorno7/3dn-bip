@@ -2,11 +2,17 @@ from io import BytesIO
 from base64 import b64decode
 
 
-class _Format:
-    '''File format info.'''
+class _BIPFormat:
+    '''BIP format info.'''
 
-    def __init__(self, magic: bytes, tests: list = None):
-        '''Initialize format info. BIP only uses `magic`.'''
+    def __init__(self, magic: bytes):
+        self.magic = magic
+
+
+class _PILFormat:
+    '''PIL format info.'''
+
+    def __init__(self, magic: bytes, tests: list):
         self.magic = magic
         self.tests = tests
         self.supported = False
@@ -21,12 +27,12 @@ _jpg_tests = [
 ]
 
 BIP_FORMATS = {
-    'BIP2': _Format(magic=b'BIP2'),
+    'BIP2': _BIPFormat(magic=b'BIP2'),
 }
 
 PIL_FORMATS = {
-    'PNG': _Format(magic=b'\x89\x50\x4e\x47', tests=_png_tests),
-    'JPG': _Format(magic=b'\xff\xd8', tests=_jpg_tests),
+    'PNG': _PILFormat(magic=b'\x89\x50\x4e\x47', tests=_png_tests),
+    'JPG': _PILFormat(magic=b'\xff\xd8', tests=_jpg_tests),
 }
 
 MAGIC_LENGTH = max(
