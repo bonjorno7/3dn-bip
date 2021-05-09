@@ -52,7 +52,7 @@ class ImagePreviewCollection:
             self._queue = Queue()
 
             if not bpy.app.timers.is_registered(self._timer):
-                bpy.app.timers.register(self._timer)
+                bpy.app.timers.register(self._timer, persistent=True)
 
     def __len__(self) -> int:
         '''Return the amount of previews in the collection.'''
