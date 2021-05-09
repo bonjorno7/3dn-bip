@@ -34,8 +34,6 @@ _import_pillow()
 
 def support_pillow() -> bool:
     '''Check whether Pillow is installed.'''
-    global Image
-
     if not Image:
         _import_pillow()
 
