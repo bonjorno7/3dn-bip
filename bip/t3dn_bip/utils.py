@@ -34,7 +34,7 @@ _import_pillow()
 
 def support_pillow() -> bool:
     '''Check whether Pillow is installed.'''
-    if not Image:
+    if not Image and 'PIL' in sys.modules:
         _import_pillow()
 
     return bool(Image)
