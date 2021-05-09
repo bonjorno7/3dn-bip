@@ -10,6 +10,9 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
+            - name: Create ZIP files
+              run: ./dist_zips.sh
+
             - name: Create release
               uses: actions/github-script@v4
               with:
@@ -29,23 +32,13 @@ jobs:
                   result-encoding: string
               id: create-release
 
-            - name: Export library
+            - name: Upload ZIP files
               run: |
-                  git archive -o ./t3dn_bip.zip HEAD:bip/t3dn_bip
-                  curl \
-                      --data-binary @"t3dn_bip.zip" \
-                      -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                      -H "Content-Type: application/octet-stream" \
-                      "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create-release.outputs.result }}/assets?name=t3dn_bip.zip"
-
-            - name: Export examples
-              run: |
-                  for example in "t3dn_bip_showcase";
+                  for zip_file in $(find dist_zips -mindepth 1 -maxdepth 1 -type f -name "*.zip");
                   do
-                      git archive -o ./${example}.zip HEAD:example/${example}
                       curl \
-                          --data-binary @"${example}.zip" \
+                          --data-binary @"$zip_file" \
                           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                           -H "Content-Type: application/octet-stream" \
-                          "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create-release.outputs.result }}/assets?name=${example}.zip"
+                          "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create-release.outputs.result }}/assets?name=$(basename "$zip_file")"
                   done
