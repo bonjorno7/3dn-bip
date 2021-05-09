@@ -106,7 +106,11 @@ def load_file(filepath: str, max_size: tuple) -> dict:
         ValueError: If file is not BIP and Pillow is not installed.
     '''
     with open(filepath, 'rb') as bip:
-        if bip.read(4) == BIP_FORMATS['BIP2'].magic:
+        magic = bip.read(MAGIC_LENGTH)
+
+        if magic.startswith(BIP_FORMATS['BIP2'].magic):
+            bip.seek(len(BIP_FORMATS['BIP2'].magic), io.SEEK_SET)
+
             count = int.from_bytes(bip.read(1), 'big')
             assert count > 0, 'the file contains no images'
 
