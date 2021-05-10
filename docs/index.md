@@ -1,75 +1,67 @@
 # Getting Started
 
-## What is
+## What is 3DN BIP?
+*3DN BIP* or *3D Ninjas Blender Image Preview* is a library, which allows blazingly fast image loads in Blender. It operates as an `bpy.utils.previews` drop-in replacement and does all the heavy lifting for you.
 
+The following major use cases are supported by our library:
 
-Get Library via PyPI:
+1) Load images shipped as BIP images. We recommend this approach in case you can generate the images beforehand. In this case, your users don't need to take any action to enjoy the speed boost.
 
-```
+2) Load regular JPEG or PNG images. We recommend this approach in case you need to load images provided by the user or by external software tools. In this case, you should use our prepared `InstallPillow` operator, so that your users can enjoy the speed boost with a simple click.
+
+Notes:
+
+1) Our library will always fallback to `bpy.utils.previews` in case unsupported formats are loaded. For this reason, there is no disadvantage in using this library. In the worst case, the standard mechanism of Blender will then be applied.
+
+2) `.bip` is a highly optimized image format, which can be transferred to Blenders internal data structures immediately. It is always blazingly fast, wheter Pillow is installed or not.
+
+## Examples
+
+Download the following sample addons. You can easily install the ZIP files in Blender via the addon preferences tab.
+
+- Getting Started: https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_getting_started.zip
+- Showcase: https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_showcase.zip
+
+## Library
+
+The latest release of the library can be downloaded here: https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip.zip
+
+Just extract the zip file and copy the folder into your addon. Take a closer look at the examples given above to learn how to use the library.
+
+In case you want to install the library via [PyPI](https://pypi.org/project/t3dn-bip/), you can use the following command:
+
+```sh
 python -m pip install t3dn-bip
 ```
 
-Get Converter via PyPI:
+## Converter
 
-```
+The converter is provided via [PyPI](https://pypi.org/project/t3dn-bip-converter/). Use the following command:
+
+```sh
 python -m pip install t3dn-bip-converter
 ```
 
-### Links
+So you can convert images of [various formats](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html) into the BIP format. Use the following command:
 
--   GitHub: [https://github.com/3dninjas/3dn-bip/](https://github.com/3dninjas/3dn-bip/)
--   Library @ PyPI: [https://pypi.org/project/t3dn-bip/](https://pypi.org/project/t3dn-bip/)
--   Converter @ PyPI: [https://pypi.org/project/t3dn-bip-converter/](https://pypi.org/project/t3dn-bip-converter/)
+```sh
+python -m t3dn_bip_converter source_file.png destination_file.bip
+```
 
----
+## Showcases
 
-## BIP Converter
-
--   Convert to `.bip`, this is done by passing the path to the original image as
-    a single arguement.
-    ```
-    python -m t3dn_bip_converter source_file.png
-    ```
--   Convert to a [`Pillow` supported format](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html),
-    this is done by passing the path to the original image as the first argument
-    and the path to the location of the converted image with it's respective
-    extension.
-    ```
-    python -m t3dn_bip_converter source_file.png destination_file.bip
-    ```
-
----
-
-## Example
-
-Download the `.zip` from the link below to get the resources referenced in the
-example.
-
-- [Getting Started](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_getting_started.zip)
-- [Showcase](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_showcase.zip)
-
-If you'd like more examples of the capability of the library, feel free to
-take a look at some examples we have created. And if you'd like
-to take a look at all the available calls, feel free to
-[take a look at the API reference](reference.md).
-
-The example draws three images that are of the optimized `.bip` format in a
-panel. Notice that the registration is a drop in replacement of the
-`bpy.utils.previews` module with an additional argument of `max_size`, one of
-the benefits of using the library.
-
-### Loading optimized `.bip` and regular `.jpg` images into a panel
+### Show `.bip` and `.jpg` images in a Panel
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/WUcGWo9gad4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-### Loading optimized `.bip` and regular `.jpg` images into an enum
+### Show `.bip` and regular `.jpg` in an Enum
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/H9-hCtpOLoo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-### Loading an optimized `.bip` and a regular `.jpg` hero images into a panel
+### Show large `.bip` and `.jpg` Hero Images in a Panel
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/W_xV93_M1Ak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-### Loading an optimized `.bip` and a regular `.jpg` images with alpha data into a panel
+### Show `.bip` and `.png` images with an Alpha Chanel
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/60D5l18AYy0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
