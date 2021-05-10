@@ -3,18 +3,13 @@
 ```
 new():
     Description:
-        Return a new preview collection.
-        An example of this would be to group the collections according to
-        function, you can choose to have a gallery with images that have a
-        maximum resolution of 128px by 128px and lazy loading enabled would be
-        used in a browser with a large volume of images. On the other hand, you
-        may have need for a hero image of 1024px by 1024px, and you'd create a
-        separate collection for this.
+        Create a new preview collection.
 
     Arguments:
-        max_size (tuple): The maximum size of previews to be held by the class
-            instance, any images that are greater than this size will be resized
-            if Pillow is present. The default value is (128, 128).
+        max_size (tuple): The maximum preview dimensions to be held by the
+            collection. Any images that are greater than this size will be
+            resized. The parameter is considered if Pillow is installed. The
+            default value is (128, 128).
         lazy_load (bool): Set whether to use lazy or eager loading. The default
             value is True.
 
@@ -28,7 +23,7 @@ remove():
         Remove the specified preview collection.
 
     Arguments:
-        collection (ImagePreviewCollection): Preview collection to close.
+        collection (ImagePreviewCollection): Preview collection to be removed.
 ```
 
 ```
@@ -46,8 +41,8 @@ class ImagePreviewCollection:
 
     new_safe():
         Description:
-            Attempt to create a new empty preview, otherwise return the
-            specified preview if it already exists in the collection.
+            Return the specified preview if it already exists in the collection.
+            Create it otherwise.
 
         Arguments:
             name (str): The name (unique id) identifying the preview.
@@ -57,27 +52,25 @@ class ImagePreviewCollection:
 
     load():
         Description:
-            Generate a new preview from the given filepath.
+            Load a new preview from the given filepath.
 
         Arguments:
             name (str): The name (unique id) identifying the preview.
-            filepath (str): The file path to generate the preview from.
-            filetype (str): The type of file, needed to generate the preview in
-            [‘IMAGE’, ‘MOVIE’, ‘BLEND’, ‘FONT’].
+            filepath (str): The file path to load the preview from.
+            filetype ('IMAGE', 'MOVIE', 'BLEND', 'FONT'): The type of the file.
 
         Returns:
             An object of type ImagePreview.
 
     load_safe():
         Description:
-            Return the specified preview if it already exists in the collection,
-            otherwise attempt to load a preview from the given filepath.
+            Return the specified preview if it already exists in the collection.
+            Load the preview from the given file path otherwise.
 
         Arguments:
             name (str): The name (unique id) identifying the preview.
-            filepath (str): The file path to generate the preview from.
-            filetype (str): The type of file, needed to generate the preview in
-            [‘IMAGE’, ‘MOVIE’, ‘BLEND’, ‘FONT’].
+            filepath (str): The file path to load the preview from.
+            filetype ('IMAGE', 'MOVIE', 'BLEND', 'FONT'): The type of the file.
 
         Returns:
             An object of type ImagePreview.
@@ -95,12 +88,10 @@ class ImagePreviewCollection:
             Remove preview with the given name and return it.
 
         Arguments:
-            key (str): The name of the preview to be fetched, removed, and
-                access returned.
-            default
+            key (str): The name of the preview to be removed and returned.
 
         Returns:
-            An object of type ImagePreview.
+            An object of type ImagePreview or None.
 
     get():
         Description:
@@ -108,30 +99,30 @@ class ImagePreviewCollection:
 
         Arguments:
             key (str): The name of the preview to be returned.
-            default: A value to return if the specified key does not exist. The
-            default value is None.
+            default (any): A value to be returned if the specified key does not
+                exist. The default value is None.
 
         Returns:
-            An object of type ImagePreview.
+            An object of type ImagePreview or None.
 
     keys():
         Description:
             Return preview names.
 
         Returns:
-            An object of type KeysView[str].
+            An iterable of type str.
 
     values():
         Description:
             Return previews.
 
         Returns:
-            An object of type ValuesView[ImagePreview].
+            An iterable of type ImagePreview.
 
     items():
         Description:
             Return pairs of name and preview.
 
         Returns:
-            An object of one of these two types ItemsView[str, ImagePreview].
+            An iterable of type (str, ImagePreview).
 ```
