@@ -15,6 +15,8 @@ jobs:
             # publish bip
             - run: sed -i -E "s/^__version__\s*=\s*.+$/__version__ = '$(cat ../.version | tr -d '[:space:]')'/" */__init__.py
               working-directory: bip
+            - run: cp ../README.md .
+              working-directory: bip
             - run: python3 -m build
               working-directory: bip
             - run: python3 -m twine upload dist/*
@@ -24,6 +26,8 @@ jobs:
                   TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_BIP }}
             # publish bip_converter
             - run: sed -i -E "s/^__version__\s*=\s*.+$/__version__ = '$(cat ../.version | tr -d '[:space:]')'/" */__init__.py
+              working-directory: bip_converter
+            - run: cp ../README.md .
               working-directory: bip_converter
             - run: python3 -m build
               working-directory: bip_converter
