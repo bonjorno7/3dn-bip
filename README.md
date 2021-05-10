@@ -9,12 +9,12 @@
 5. [Development](https://3dninjas.github.io/3dn-bip/development/)
 
 ## What is 3DN BIP?
-*3DN BIP* or *3D Ninjas Blender Image Preview* is a library, which allows blazingly fast image loads in Blender. Furthermore, it can load preview images of arbitrary size. It operates as an `bpy.utils.previews` drop-in replacement and does all the heavy lifting for you.
+*3DN BIP* or *3D Ninjas Blender Image Preview* is a library, which allows blazingly fast preview image loads in Blender. Furthermore, it can load preview images of arbitrary size. It operates as an `bpy.utils.previews` drop-in replacement and does all the heavy lifting for you.
 
 Our library enables the following major use cases:
 
-1. Load images shipped as BIP images blazingly fast. We recommend this approach in case you can generate the images beforehand. In this case, your users don't need to take any action to enjoy the speed boost.
-2. Load regular JPEG or PNG images blazingly fast. Recommended in case you need to load images provided by the user or by external software tools. For that, we need [Pillow](https://pypi.org/project/Pillow/) on the user's system. It would be best if you use our prepared `InstallPillow` operator so that your users can enjoy the speed boost with a simple click.
+1. Load preview images shipped as BIP images blazingly fast. We recommend this approach in case you can generate the images beforehand. In this case, your users don't need to take any action to enjoy the speed boost.
+2. Load regular JPEG or PNG preview images blazingly fast. Recommended in case you need to load images provided by the user or by external software tools. For that, we need [Pillow](https://pypi.org/project/Pillow/) on the user's system. It would be best if you use our prepared `InstallPillow` operator so that your users can enjoy the speed boost with a simple click.
 
 Notes:
 
