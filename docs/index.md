@@ -17,12 +17,12 @@ Notes:
 
 Download the following sample addons. You can easily install the ZIP files in Blender via the addon preferences tab.
 
-- Getting Started: https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_getting_started.zip
-- Showcase: https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_showcase.zip
+- Getting Started: [t3dn_bip_getting_started.zip](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_getting_started.zip)
+- Showcase: [t3dn_bip_showcase.zip](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_showcase.zip)
 
 ## Library
 
-The latest release of the library can be downloaded here: https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip.zip
+The latest release of the library can be downloaded here: [t3dn_bip.zip](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip.zip)
 
 Just extract the zip file and copy the folder into your addon. Take a closer look at the examples given above to learn how to use the library.
 
