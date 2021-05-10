@@ -50,11 +50,11 @@ python -m t3dn_bip_converter source_file.png destination_file.bip
 
 ## Showcases
 
-### Show `.bip` and `.jpg` images in a Panel
+### Show `.bip` and `.jpg` Images in a Panel
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/WUcGWo9gad4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-### Show `.bip` and regular `.jpg` in an Enum
+### Show `.bip` and `.jpg` Images in an Enum
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/H9-hCtpOLoo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -62,6 +62,6 @@ python -m t3dn_bip_converter source_file.png destination_file.bip
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/W_xV93_M1Ak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-### Show `.bip` and `.png` images with an Alpha Chanel
+### Show `.bip` and `.png` Images with an Alpha Channel
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/60D5l18AYy0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
