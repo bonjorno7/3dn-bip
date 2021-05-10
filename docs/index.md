@@ -1,99 +1,75 @@
-## About
+# Getting Started
 
-**Blender Image Preview**, or **BIP** for short is a
-[Blender](https://blender.org) library by 3D Ninjas that allows addon developers
-to have extra functionality that would take quite some time for them to set up
-on their own. `.bip` is a format designed to be 100% compatible with the Blender
-in-memory format of these objects. It primarily guarantees, that we can just
-read the data from the file and copy it without any modifications in the right
-buffer.
+## What is
 
-### Origin
 
-BIP came about as a solution to image previews on an asset manager that we are
-currently developing at **[3D Ninjas](https://3dninjas.io)**. While working on
-this project, we realized that the resolution of the images provided by the
-default `bpy.utils.previews` was quite limiting in that we had no control as to
-image quality/resolution. After some sessions and development, BIP came to life.
-We decided that such knowledge should not be hoarded but rather shared with the
-Blender community.
+Get Library via PyPI:
 
-### Ease-Of-Use
+```
+python -m pip install t3dn-bip
+```
 
-The library can be used as a direct drop-in replacement for the Blender's
-default `bpy.utils.previews` module, however, it pays off to take a bit of time
-to look into the other features that come with the library.
+Get Converter via PyPI:
+
+```
+python -m pip install t3dn-bip-converter
+```
+
+### Links
+
+-   GitHub: [https://github.com/3dninjas/3dn-bip/](https://github.com/3dninjas/3dn-bip/)
+-   Library @ PyPI: [https://pypi.org/project/t3dn-bip/](https://pypi.org/project/t3dn-bip/)
+-   Converter @ PyPI: [https://pypi.org/project/t3dn-bip-converter/](https://pypi.org/project/t3dn-bip-converter/)
 
 ---
 
-## Use Cases
+## BIP Converter
 
-### Controlled Environment
-
-If you create all the images yourself, you can use the highly optimized `.bip`
-format to load the images. Converting images to the `.bip` format is covered in
-the **[Getting Started](getting_started.md)** guide.
-
-### Images In Any Size
-
-Loading arbitrarily sized images. By default Blender's standard previews
-come at a resolution of `32px by 32px` for icons and `128px by 128px` for
-images. With BIP, you have control of the image sizes per collection. For
-example, you can choose to have a hero image previewed at a specific place
-within your addon of `1024px by 1024px`, you can then choose to have a more
-optimized collection of images `128px by 128px` to use for displaying items in
-a library.
-
-### Fast Image Load and Resize with Pillow
-
-Use of Python's [`Pillow`](https://pypi.org/project/Pillow/) library to
-quickly process images that you do not have control over. A use case for this
-would be if your addon allows for users to load their own images or from an
-external software, you would not have control as to how big they. In such a
-case, you will need to use the built-in base class for an operator that is
-provided by the library to create your own operator to install
-[`Pillow`](https://pypi.org/project/Pillow/). If the user does not opt into
-using this operator, then the library will default to Blender's standard preview
-service.
+-   Convert to `.bip`, this is done by passing the path to the original image as
+    a single arguement.
+    ```
+    python -m t3dn_bip_converter source_file.png
+    ```
+-   Convert to a [`Pillow` supported format](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html),
+    this is done by passing the path to the original image as the first argument
+    and the path to the location of the converted image with it's respective
+    extension.
+    ```
+    python -m t3dn_bip_converter source_file.png destination_file.bip
+    ```
 
 ---
 
-## Features
+## Example
 
--   Drop-in replacement for the standard Blender preview library
-    `(bpy.utils.previews)`.
--   Use of an optimized format for loading previews.
--   Load arbitrarily sized images, you are not locked with Blender's default
-    maximum of `256px by 256px`.
--   Support for lazy and eager loading of previews.
+Download the `.zip` from the link below to get the resources referenced in the
+example.
 
-    -   Lazy loading is the recommended method of loading previews as it allows
-        the interface to remain responsive.
-    -   Eager loading also comes built into the library but is not recommended,
-        this is due to the fact that there are factors that are out of the
-        developer's control such as slow systems without SSDs, growing dynamic
-        lists of images, etc.
+- [Getting Started](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_getting_started.zip)
+- [Showcase](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_showcase.zip)
 
--   Support for loading previews that are out of your control with the use of
-    the [`Pillow`](https://pypi.org/project/Pillow/) library. The library comes
-    with a built-in base class for an operator for you to create your own
-    operator to install [`Pillow`](https://pypi.org/project/Pillow/). How to
-    take advantage of this is covered in **[Getting Started](getting_started.md)**.
+If you'd like more examples of the capability of the library, feel free to
+take a look at some examples we have created. And if you'd like
+to take a look at all the available calls, feel free to
+[take a look at the API reference](reference.md).
 
--   Pre-set safety when loading previews, instead of using the `load()` method,
-    you can opt to use the `load_safe()` method. The same is the case for the
-    `new()` method. This allows you to focus on loading your previews and less
-    on whether you need to provide a safety check.
+The example draws three images that are of the optimized `.bip` format in a
+panel. Notice that the registration is a drop in replacement of the
+`bpy.utils.previews` module with an additional argument of `max_size`, one of
+the benefits of using the library.
 
--   Being a drop-in replacement for `bpy.utils.previews` the library maintains
-    support for the standard Blender loading behaviour of other file types that
-    are not compatible with `BIP`. Their items are in the enum
-    `[‘MOVIE’, ‘BLEND’, ‘FONT’]`. This is covered in the
-    [`API Reference`](api_reference.md).
+### Loading optimized `.bip` and regular `.jpg` images into a panel
 
-## Warnings
+<iframe width="560" height="315" src="https://www.youtube.com/embed/WUcGWo9gad4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
--   BIP is powerful but it's also wise to practice discretion, loading images
-    that are unnecessarily large is not recommended, we recommend using the
-    library to load reasonably sized images or single large images depending on
-    context.
+### Loading optimized `.bip` and regular `.jpg` images into an enum
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/H9-hCtpOLoo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+### Loading an optimized `.bip` and a regular `.jpg` hero images into a panel
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/W_xV93_M1Ak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+### Loading an optimized `.bip` and a regular `.jpg` images with alpha data into a panel
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/60D5l18AYy0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

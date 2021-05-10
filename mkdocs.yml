@@ -1,13 +1,13 @@
 # Project information
-site_name: 3D Ninjas | Blender Image Preview
+site_name: 3D Ninjas | Blender Image Preview (BIP) Library
 site_url: https://3dninjas.github.io/3dn-bip/
 site_author: 3D Ninjas GmbH
-site_description: Lorem ipsum
+site_description: ""
 
 # Repository
 repo_name: 3dninjas/3dn-bip
 repo_url: https://github.com/3dninjas/3dn-bip
-edit_uri: ""
+edit_uri: https://github.com/3dninjas/3dn-bip/fork
 
 # Copyright
 copyright: Copyright &copy; 2021 3D Ninjas GmbH
@@ -15,8 +15,7 @@ copyright: Copyright &copy; 2021 3D Ninjas GmbH
 theme:
     name: material
 
-    # Don't include MkDocs' JavaScript
-    include_search_page: false
+    include_search_page: true
     search_index_only: true
 
     palette:
@@ -63,10 +62,10 @@ extra:
 
 # Page navigation
 nav:
-  - Overview: index.md
-  - Getting Started: getting_started.md
-  - API Reference: api_reference.md
-  - Examples: examples.md
+  - Getting Started: index.md
+  - Install Pillow: install_pillow.md
+  - Reference: reference.md
+  - About: about.md
 
 markdown_extensions:
     - admonition
