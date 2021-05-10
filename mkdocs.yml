@@ -7,7 +7,7 @@ site_description: ""
 # Repository
 repo_name: 3dninjas/3dn-bip
 repo_url: https://github.com/3dninjas/3dn-bip
-edit_uri: https://github.com/3dninjas/3dn-bip/fork
+edit_uri: https://github.com/3dninjas/3dn-bip/edit/publish/docs
 
 # Copyright
 copyright: Copyright &copy; 2021 3D Ninjas GmbH
@@ -66,6 +66,7 @@ nav:
   - Install Pillow: install_pillow.md
   - Reference: reference.md
   - More: more.md
+  - Development: development.md
 
 markdown_extensions:
     - admonition
