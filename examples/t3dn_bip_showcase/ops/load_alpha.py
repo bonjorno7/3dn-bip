@@ -2,8 +2,8 @@ import bpy
 from .. import previews
 
 
-class T3DN_OT_bip_example_load_alpha(bpy.types.Operator):
-    bl_idname = 't3dn.bip_example_load_alpha'
+class T3DN_OT_bip_showcase_load_alpha(bpy.types.Operator):
+    bl_idname = 't3dn.bip_showcase_load_alpha'
     bl_label = 'Load Alpha Previews'
     bl_description = '.\n'.join((
         'Load BIP and PNG with transparency',
@@ -29,8 +29,8 @@ class T3DN_OT_bip_example_load_alpha(bpy.types.Operator):
         row.template_icon(self._png.icon_id, scale=6.8)
 
         row = self.layout.row()
-        row.operator('t3dn.bip_example_dummy', icon_value=self._bip.icon_id)
-        row.operator('t3dn.bip_example_dummy', icon_value=self._png.icon_id)
+        row.operator('t3dn.bip_showcase_dummy', icon_value=self._bip.icon_id)
+        row.operator('t3dn.bip_showcase_dummy', icon_value=self._png.icon_id)
 
     def execute(self, context: bpy.types.Context) -> set:
         return {'FINISHED'}

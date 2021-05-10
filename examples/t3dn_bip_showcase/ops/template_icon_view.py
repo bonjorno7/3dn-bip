@@ -18,8 +18,8 @@ def _get_icon_list(self, context: bpy.types.Context):
     return _icons
 
 
-class T3DN_OT_bip_example_template_icon_view(bpy.types.Operator):
-    bl_idname = 't3dn.bip_example_template_icon_view'
+class T3DN_OT_bip_showcase_template_icon_view(bpy.types.Operator):
+    bl_idname = 't3dn.bip_showcase_template_icon_view'
     bl_label = 'Template Icon View'
     bl_description = 'Load and use images with the `template_icon_view` construct'
     bl_options = {'REGISTER', 'INTERNAL'}

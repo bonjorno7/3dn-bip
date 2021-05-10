@@ -1,7 +1,7 @@
 bl_info = {
-    'name': 'BIP Example',
-    'description': 'Showcase the 3D Ninjas Blender Image Preview library.',
-    'author': 'Jorijn de Graaf',
+    'name': '3DN BIP Showcase',
+    'description': 'Showcase 3D Ninjas BIP library',
+    'author': '3D Ninjas',
     'version': (1, 2),
     'blender': (2, 80, 0),
     'location': '3D View > Sidebar',
