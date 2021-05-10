@@ -1,6 +1,6 @@
 bl_info = {
     'name': '3DN BIP Showcase',
-    'description': 'Showcase 3D Ninjas BIP library.',
+    'description': 'Showcase 3D Ninjas BIP library',
     'author': '3D Ninjas',
     'version': (1, 2),
     'blender': (2, 80, 0),
