@@ -11,14 +11,14 @@
         <meta name="author" content="3D Ninjas GmbH">
       
       
-        <link rel="canonical" href="https://3dninjas.github.io/3dn-bip/more/">
+        <link rel="canonical" href="https://3dninjas.github.io/3dn-bip/development/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
     
     
       
-        <title>More - 3D Ninjas | Blender Image Preview (BIP) Library</title>
+        <title>Development - 3D Ninjas | Blender Image Preview (BIP) Library</title>
       
     
     
@@ -67,7 +67,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#more" class="md-skip">
+        <a href="#development" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              More
+              Development
             
           </span>
         </div>
@@ -268,6 +268,21 @@
 
   
   
+  
+    <li class="md-nav__item">
+      <a href="../more/" class="md-nav__link">
+        More
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -280,12 +295,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          More
+          Development
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        More
+        Development
       </a>
       
         
@@ -303,22 +318,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
+  <a href="#vsc-extensions" class="md-nav__link">
+    VSC Extensions
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#warning" class="md-nav__link">
-    Warning
+  <a href="#python-packages" class="md-nav__link">
+    Python Packages
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-idea" class="md-nav__link">
-    The Idea
+  <a href="#setup-symbolic-links-on-windows" class="md-nav__link">
+    Setup Symbolic Links on Windows
   </a>
   
 </li>
@@ -327,21 +342,6 @@
   
 </nav>
       
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../development/" class="md-nav__link">
-        Development
-      </a>
     </li>
   
 
@@ -372,22 +372,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
+  <a href="#vsc-extensions" class="md-nav__link">
+    VSC Extensions
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#warning" class="md-nav__link">
-    Warning
+  <a href="#python-packages" class="md-nav__link">
+    Python Packages
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-idea" class="md-nav__link">
-    The Idea
+  <a href="#setup-symbolic-links-on-windows" class="md-nav__link">
+    Setup Symbolic Links on Windows
   </a>
   
 </li>
@@ -404,31 +404,37 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/3dninjas/3dn-bip/edit/publish/docs/more.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/3dninjas/3dn-bip/edit/publish/docs/development.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="more">More</h1>
-<h2 id="features">Features</h2>
+                <h1 id="development">Development</h1>
+<p>Use Visual Studio Code together with EditorConfig, Python, YAPF, and Pylint.</p>
+<h2 id="vsc-extensions">VSC Extensions</h2>
+<p>Install the following Visual Studio Code extensions:</p>
 <ul>
-<li>Drop-in replacement for <code>bpy.utils.previews</code>.</li>
-<li>Provides a highly optimized format for loading previews.</li>
-<li>Loads arbitrarily sized images. You are not locked with Blender's default of <code>128x128</code>.</li>
-<li>Support for lazy and eager loading of previews.<ul>
-<li>Lazy loading is the recommended method of loading previews as it allows the user interface to remain responsive.</li>
-<li>Eager loading is possible but not recommended. Some factors are out of the developer's control, such as slow systems without SSDs, growing dynamic lists of images, etc.</li>
+<li>editorconfig.editorconfig</li>
+<li>ms-python.python</li>
 </ul>
+<h2 id="python-packages">Python Packages</h2>
+<p>Install the following Python packages:</p>
+<ul>
+<li>yapf</li>
+<li>pylint</li>
+</ul>
+<h2 id="setup-symbolic-links-on-windows">Setup Symbolic Links on Windows</h2>
+<p>This repository uses symbolic links. Please enable support for it on your Windows setup, before cloning this repository.</p>
+<ol>
+<li>Enable symlinks in Git: <code>git config --global core.symlinks true</code></li>
+<li>Enable symlink policy:<ol>
+<li>Run <code>gpedit.msc</code></li>
+<li>Computer configuration → Windows Settings → Security Settings → Local Policies → User Rights Assignment</li>
+<li>Edit <code>Create symbolic links</code> policy and add your Windows user to it</li>
+<li>Save and reboot</li>
+</ol>
 </li>
-<li>Supports a fast load of PNG and JPEG previews if the <a href="https://pypi.org/project/Pillow/">Pillow</a> library is installed.</li>
-<li>A built-in base class for an operator to install <a href="https://pypi.org/project/Pillow/">Pillow</a> with a single click.</li>
-<li>Convenience function <code>load_safe()</code> which can be called repetitively. In case the image is loaded already, it will be returned instead. It allows you to focus on loading your previews and requires less management code on your end.</li>
-<li>Being a drop-in replacement for <code>bpy.utils.previews</code>, the library maintains support for the standard Blender loading behavior of other file types that are not supported.</li>
-</ul>
-<h2 id="warning">Warning</h2>
-<p>Our library is powerful, but we recommend using it wisely. Loading images that are unnecessarily large will slow down the user interface and consume memory. We recommend using the library to load reasonably sized images depending on the context.</p>
-<h2 id="the-idea">The Idea</h2>
-<p>We developed this library while developing an asset manager for Blender. While working on this project, we realized that the resolution of the images provided by the default <code>bpy.utils.previews</code> was quite limiting in that we had no control as to image quality/resolution. After some sessions and development, this library came to life. We decided that we should not hoard such knowledge but rather share it with the Blender community.</p>
+</ol>
                 
               
               
@@ -447,7 +453,7 @@
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../reference/" class="md-footer__link md-footer__link--prev" rel="prev">
+        <a href="../more/" class="md-footer__link md-footer__link--prev" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -456,25 +462,11 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Reference
+              More
             </div>
           </div>
         </a>
       
-      
-        <a href="../development/" class="md-footer__link md-footer__link--next" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Development
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-          </div>
-        </a>
       
     </nav>
   
