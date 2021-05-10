@@ -1,5 +1,13 @@
 # 3D Ninjas | Blender Image Preview (BIP) Library
 
+## Documentation
+
+1. [Getting Started (this page)](https://3dninjas.github.io/3dn-bip/)
+2. [Install Pillow](https://3dninjas.github.io/3dn-bip/install_pillow/)
+3. [Reference](https://3dninjas.github.io/3dn-bip/reference/)
+4. [More](https://3dninjas.github.io/3dn-bip/more/)
+5. [Development](https://3dninjas.github.io/3dn-bip/development/)
+
 ## What is 3DN BIP?
 *3DN BIP* or *3D Ninjas Blender Image Preview* is a library, which allows blazingly fast image loads in Blender. It operates as a `bpy.utils.previews` drop-in replacement and does all the heavy lifting for you.
 
@@ -50,16 +58,16 @@ python -m t3dn_bip_converter source_file.png destination_file.bip
 
 ### Show `.bip` and `.jpg` Images in a Panel
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/WUcGWo9gad4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<a href="https://www.youtube.com/watch?v=WUcGWo9gad4&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/WUcGWo9gad4/maxresdefault.jpg"></a>
 
 ### Show `.bip` and `.jpg` Images in an Enum
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/H9-hCtpOLoo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<a href="https://www.youtube.com/watch?v=H9-hCtpOLoo&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/H9-hCtpOLoo/maxresdefault.jpg"></a>
 
 ### Show large `.bip` and `.jpg` Hero Images in a Panel
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/W_xV93_M1Ak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<a href="https://www.youtube.com/watch?v=W_xV93_M1Ak&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/W_xV93_M1Ak/maxresdefault.jpg"></a>
 
 ### Show `.bip` and `.png` Images with an Alpha Channel
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/60D5l18AYy0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<a href="https://www.youtube.com/watch?v=60D5l18AYy0&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/60D5l18AYy0/maxresdefault.jpg"></a>

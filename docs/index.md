@@ -1,4 +1,4 @@
-# 3D Ninjas | Blender Image Preview (BIP) Library
+# Getting Started
 
 ## What is 3DN BIP?
 *3DN BIP* or *3D Ninjas Blender Image Preview* is a library, which allows blazingly fast image loads in Blender. It operates as a `bpy.utils.previews` drop-in replacement and does all the heavy lifting for you.
