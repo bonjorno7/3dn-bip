@@ -56,7 +56,7 @@ python -m t3dn_bip_converter source_file.png destination_file.bip
 
 ## Showcases
 
-### Show `.bip` and `.jpg` Images in a Panel
+### Show `.bip` and `.jpg` Images
 
 <a href="https://www.youtube.com/watch?v=WUcGWo9gad4&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/WUcGWo9gad4/maxresdefault.jpg"></a>
 
@@ -64,7 +64,7 @@ python -m t3dn_bip_converter source_file.png destination_file.bip
 
 <a href="https://www.youtube.com/watch?v=H9-hCtpOLoo&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/H9-hCtpOLoo/maxresdefault.jpg"></a>
 
-### Show large `.bip` and `.jpg` Hero Images in a Panel
+### Show large `.bip` and `.jpg` Hero Images
 
 <a href="https://www.youtube.com/watch?v=W_xV93_M1Ak&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/W_xV93_M1Ak/maxresdefault.jpg"></a>
 
