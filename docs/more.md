@@ -1,4 +1,4 @@
-# About
+# More
 
 ## Features
 

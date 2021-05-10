@@ -65,7 +65,7 @@ nav:
   - Getting Started: index.md
   - Install Pillow: install_pillow.md
   - Reference: reference.md
-  - About: about.md
+  - More: more.md
 
 markdown_extensions:
     - admonition
