@@ -5,15 +5,13 @@
 
 The following major use cases are supported by our library:
 
-1) Load images shipped as BIP images. We recommend this approach in case you can generate the images beforehand. In this case, your users don't need to take any action to enjoy the speed boost.
-
-2) Load regular JPEG or PNG images. We recommend this approach in case you need to load images provided by the user or by external software tools. In this case, you should use our prepared `InstallPillow` operator, so that your users can enjoy the speed boost with a simple click.
+1. Load images shipped as BIP images. We recommend this approach in case you can generate the images beforehand. In this case, your users don't need to take any action to enjoy the speed boost.
+2. Load regular JPEG or PNG images. We recommend this approach in case you need to load images provided by the user or by external software tools. In this case, you should use our prepared `InstallPillow` operator, so that your users can enjoy the speed boost with a simple click.
 
 Notes:
 
-1) Our library will always fallback to `bpy.utils.previews` in case unsupported formats are loaded. For this reason, there is no disadvantage in using this library. In the worst case, the standard mechanism of Blender will then be applied.
-
-2) `.bip` is a highly optimized image format, which can be transferred to Blenders internal data structures immediately. It is always blazingly fast, wheter Pillow is installed or not.
+1. Our library will always fallback to `bpy.utils.previews` in case unsupported formats are loaded. For this reason, there is no disadvantage in using this library. In the worst case, the standard mechanism of Blender will then be applied.
+2. `.bip` is a highly optimized image format, which can be transferred to Blenders internal data structures immediately. It is always blazingly fast, wheter Pillow is installed or not.
 
 ## Examples
 
