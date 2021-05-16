@@ -46,6 +46,14 @@ Use the following command to convert images of [various formats](https://pillow.
 python -m t3dn_bip_converter source_file.png destination_file.bip
 ```
 
+## Who is using 3DN BIP?
+
+3DN BIP is a new library and is currently being integrated into various addons. The following addons have already been released with 3DN BIP.
+
+### KIT OPS
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_ZyNrptwtik?start=15" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Showcases
 
 ### Show `.bip` and `.jpg` Images
