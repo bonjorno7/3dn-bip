@@ -1,15 +1,11 @@
 import bpy
 import bpy.utils.previews
 from bpy.types import ImagePreview
-from multiprocessing.dummy import Pool
-from multiprocessing import cpu_count
 from threading import Event
-from queue import Queue
-from traceback import print_exc
-from time import time
 from typing import ItemsView, Iterator, KeysView, ValuesView
-from .utils import support_pillow, can_load, load_file, tag_redraw
+from .utils import support_pillow, can_load, load_file
 from .formats import unsupported_formats
+from .thread import load_async
 
 WARNINGS = True
 
@@ -47,12 +43,7 @@ class ImagePreviewCollection:
         self._lazy_load = lazy_load
 
         if self._lazy_load:
-            self._pool = Pool(processes=cpu_count())
             self._event = None
-            self._queue = Queue()
-
-            if not bpy.app.timers.is_registered(self._timer):
-                bpy.app.timers.register(self._timer, persistent=True)
 
     def __len__(self) -> int:
         '''Return the amount of previews in the collection.'''
@@ -123,10 +114,12 @@ class ImagePreviewCollection:
 
         preview = self.new(name)
 
-        self._pool.apply_async(
-            func=self._load_async,
-            args=(name, filepath, self._get_event()),
-            error_callback=print,
+        load_async(
+            self._collection,
+            name,
+            filepath,
+            self._max_size,
+            self._get_event(),
         )
 
         return preview
@@ -158,58 +151,10 @@ class ImagePreviewCollection:
 
         return preview
 
-    def _load_async(self, name: str, filepath: str, event: Event):
-        '''Load image contents from file and queue preview load.'''
-        if not event.is_set():
-            data = load_file(filepath, self._max_size)
-
-        if not event.is_set():
-            self._queue.put((name, data, event))
-
-    def _timer(self):
-        '''Load queued image contents into previews.'''
-        now = time()
-        redraw = False
-        delay = 0.1
-
-        while time() - now < 0.1:
-            try:
-                args = self._queue.get(block=False)
-            except:
-                break
-
-            try:
-                self._load_queued(*args)
-            except:
-                print_exc()
-            else:
-                redraw = True
-
-        else:
-            delay = 0.0
-
-        if redraw:
-            tag_redraw()
-
-        return delay
-
-    def _load_queued(self, name: str, data: dict, event: Event):
-        '''Load queued image contents into preview.'''
-        if not event.is_set():
-            if name in self:
-                preview = self[name]
-                preview.icon_size = data['icon_size']
-                preview.icon_pixels = data['icon_pixels']
-                preview.image_size = data['image_size']
-                preview.image_pixels = data['image_pixels']
-
     def clear(self):
         '''Clear all previews.'''
         if self._lazy_load:
             self._set_event()
-
-            with self._queue.mutex:
-                self._queue.queue.clear()
 
         self._collection.clear()
 
@@ -217,9 +162,6 @@ class ImagePreviewCollection:
         '''Close the collection and clear all previews.'''
         if self._lazy_load:
             self._set_event()
-
-            if bpy.app.timers.is_registered(self._timer):
-                bpy.app.timers.unregister(self._timer)
 
         self._collection.close()
 
