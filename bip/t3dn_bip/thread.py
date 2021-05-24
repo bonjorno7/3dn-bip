@@ -4,15 +4,14 @@ from queue import Queue, Empty
 from threading import Event, Thread
 from time import time
 from traceback import print_exc
-from .utils import load_file, tag_redraw
 from multiprocessing import cpu_count
+from .utils import load_file, tag_redraw
+from . import settings
 
 _pending = 0
 _queue_read = Queue()
 _queue_emplace = Queue()
 _thread_stopsig = None
-
-MAX_THREADS = 4
 
 
 def _read_thread(thread_index: int, stopsig: Event):
@@ -124,7 +123,7 @@ def load_async(
     # Start read thread if not running.
     if not _thread_stopsig:
         _thread_stopsig = Event()
-        for i in range(max(min(cpu_count(), MAX_THREADS), 1)):
+        for i in range(max(min(cpu_count(), settings.MAX_THREADS), 1)):
             thread = Thread(target=_read_thread, args=(i, _thread_stopsig))
             thread.start()
 

@@ -6,8 +6,7 @@ from typing import ItemsView, Iterator, KeysView, ValuesView
 from .utils import support_pillow, can_load, load_file
 from .formats import unsupported_formats
 from .thread import load_async
-
-WARNINGS = True
+from . import settings
 
 
 class ImagePreviewCollection:
@@ -15,7 +14,7 @@ class ImagePreviewCollection:
 
     def __init__(self, max_size: tuple = (128, 128), lazy_load: bool = True):
         '''Create collection and start internal timer.'''
-        if WARNINGS:
+        if settings.WARNINGS:
             if not support_pillow():
                 print('Pillow is not installed, therefore:')
                 print('- BIP images load without scaling.')
