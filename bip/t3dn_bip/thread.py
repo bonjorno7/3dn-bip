@@ -17,8 +17,6 @@ _thread_stopsig = None
 def _read_thread(thread_index: int, stopsig: Event):
     '''Read image data in the background.'''
 
-    print(f'bip: read thread {thread_index} started')
-
     # Run read loop until we are stopped.
     while not stopsig.is_set():
         # Try to get the next item from the read queue. Wait 1s for it.
@@ -38,8 +36,6 @@ def _read_thread(thread_index: int, stopsig: Event):
 
         # Queue for emplacement.
         _queue_emplace.put((collection, name, data, abortsig))
-
-    print(f'bip: read thread {thread_index} completed')
 
 
 def _emplace_timer():
@@ -95,7 +91,6 @@ def _emplace_timer():
         # Unregister emplace timer.
         if bpy.app.timers.is_registered(_emplace_timer):
             bpy.app.timers.unregister(_emplace_timer)
-        print('bip: emplace timer de-registered')
         delay = None
 
     # Schedule next timer call.
@@ -130,4 +125,3 @@ def load_async(
     # Register emplace timer if not installed.
     if not bpy.app.timers.is_registered(_emplace_timer):
         bpy.app.timers.register(_emplace_timer, persistent=True)
-        print('bip: emplace timer registered')
