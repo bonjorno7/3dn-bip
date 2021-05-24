@@ -6,7 +6,7 @@ class _BIPFormat:
     '''BIP format info.'''
 
     def __init__(self, exts: list, magic: bytes):
-        self.exsts = exts
+        self.exts = exts
         self.magic = magic
 
 
@@ -14,7 +14,7 @@ class _PILFormat:
     '''PIL format info.'''
 
     def __init__(self, exts: list, magic: bytes, tests: list):
-        self.exsts = exts
+        self.exts = exts
         self.magic = magic
         self.tests = tests
         self.supported = False

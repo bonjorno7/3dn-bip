@@ -100,7 +100,7 @@ def can_load(filepath: str) -> bool:
 
             # We support BIP (currently only BIP2).
             for spec in BIP_FORMATS.values():
-                if ext in spec.exsts:
+                if ext in spec.exts:
                     return True
 
             # If Pillow is not installed, we don't support other formats.
@@ -109,7 +109,7 @@ def can_load(filepath: str) -> bool:
 
             # If Pillow is installed, find out if we support this format.
             for spec in PIL_FORMATS.values():
-                if ext in spec.exsts:
+                if ext in spec.exts:
                     return spec.supported
 
     # Not supported.
