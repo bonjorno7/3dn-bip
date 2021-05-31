@@ -5,7 +5,7 @@ from threading import Event
 from typing import ItemsView, Iterator, KeysView, ValuesView
 from .utils import support_pillow, can_load, load_file
 from .formats import unsupported_formats
-from .thread import load_async
+from .threads import load_async
 from . import settings
 
 
