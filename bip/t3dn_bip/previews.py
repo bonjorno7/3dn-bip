@@ -42,7 +42,7 @@ class ImagePreviewCollection:
         self._lazy_load = lazy_load
 
         if self._lazy_load:
-            self._event = None
+            self._abort_signal = None
 
     def __len__(self) -> int:
         '''Return the amount of previews in the collection.'''
@@ -118,7 +118,7 @@ class ImagePreviewCollection:
             name,
             filepath,
             self._max_size,
-            self._get_event(),
+            self._get_abort_signal(),
         )
 
         return preview
@@ -153,29 +153,29 @@ class ImagePreviewCollection:
     def clear(self):
         '''Clear all previews.'''
         if self._lazy_load:
-            self._set_event()
+            self._set_abort_signal()
 
         self._collection.clear()
 
     def close(self):
         '''Close the collection and clear all previews.'''
         if self._lazy_load:
-            self._set_event()
+            self._set_abort_signal()
 
         self._collection.close()
 
-    def _get_event(self) -> Event:
-        '''Get the clear event, make one if necesssary.'''
-        if self._event is None:
-            self._event = Event()
+    def _get_abort_signal(self) -> Event:
+        '''Get the abort signal, make one if necesssary.'''
+        if self._abort_signal is None:
+            self._abort_signal = Event()
 
-        return self._event
+        return self._abort_signal
 
-    def _set_event(self):
-        '''Set the clear event, then remove the reference.'''
-        if self._event is not None:
-            self._event.set()
-            self._event = None
+    def _set_abort_signal(self):
+        '''Set the abort signal, then remove the reference.'''
+        if self._abort_signal is not None:
+            self._abort_signal.set()
+            self._abort_signal = None
 
 
 def new(
