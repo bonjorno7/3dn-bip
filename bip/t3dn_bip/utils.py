@@ -73,7 +73,6 @@ def can_load(filepath: str) -> bool:
 
     # Perform a magic check if configured.
     if settings.USE_MAGIC:
-        # Read magic for format detection.
         with open(filepath, 'rb') as file:
             magic = file.read(MAGIC_LENGTH)
 
@@ -93,24 +92,25 @@ def can_load(filepath: str) -> bool:
 
     # Perform a file extension check otherwise.
     else:
-        ext = Path(filepath).suffix
+        ext = Path(filepath).suffix.lower()
 
-        if ext:
-            ext = ext.lower()
+        # We can't check the extention if the file doesn't have one.
+        if not ext:
+            return False
 
-            # We support BIP (currently only BIP2).
-            for spec in BIP_FORMATS.values():
-                if ext in spec.exts:
-                    return True
+        # We support BIP (currently only BIP2).
+        for spec in BIP_FORMATS.values():
+            if ext in spec.exts:
+                return True
 
-            # If Pillow is not installed, we don't support other formats.
-            if not support_pillow():
-                return False
+        # If Pillow is not installed, we don't support other formats.
+        if not support_pillow():
+            return False
 
-            # If Pillow is installed, find out if we support this format.
-            for spec in PIL_FORMATS.values():
-                if ext in spec.exts:
-                    return spec.supported
+        # If Pillow is installed, find out if we support this format.
+        for spec in PIL_FORMATS.values():
+            if ext in spec.exts:
+                return spec.supported
 
     # Not supported.
     return False
