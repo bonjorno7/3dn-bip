@@ -30,7 +30,7 @@ _jpg_tests = [
 
 BIP_FORMATS = {
     'BIP2': _BIPFormat(
-        exts=['bip', 'bip2'],
+        exts=['.bip', '.bip2'],
         magic=b'BIP2',
     ),
 }
@@ -38,13 +38,13 @@ BIP_FORMATS = {
 PIL_FORMATS = {
     'PNG':
         _PILFormat(
-            exts=['png'],
+            exts=['.png'],
             magic=b'\x89\x50\x4e\x47',
             tests=_png_tests,
         ),
     'JPG':
         _PILFormat(
-            exts=['jpg', 'jpeg', 'jpe', 'jif', 'jfif'],
+            exts=['.jpg', '.jpeg', '.jpe', '.jif', '.jfif'],
             magic=b'\xff\xd8',
             tests=_jpg_tests,
         ),

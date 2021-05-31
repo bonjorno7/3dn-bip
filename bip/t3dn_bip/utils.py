@@ -7,7 +7,6 @@ import importlib.util
 from pathlib import Path
 from zlib import decompress
 from array import array
-from os.path import splitext
 from .formats import test_formats, BIP_FORMATS, PIL_FORMATS, MAGIC_LENGTH
 from . import settings
 
@@ -94,9 +93,10 @@ def can_load(filepath: str) -> bool:
 
     # Perform a file extension check otherwise.
     else:
-        ext = splitext(filepath)[1]
+        ext = Path(filepath).suffix
+
         if ext:
-            ext = ext[1:].lower()
+            ext = ext.lower()
 
             # We support BIP (currently only BIP2).
             for spec in BIP_FORMATS.values():
