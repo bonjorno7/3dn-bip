@@ -9,7 +9,8 @@
 5. [Development](https://3dninjas.github.io/3dn-bip/development/)
 
 ## What is 3DN BIP?
-*3DN BIP* or *3D Ninjas Blender Image Preview* is a library, which allows blazingly fast preview image loads in Blender. Furthermore, it can load preview images of arbitrary size. It operates as an `bpy.utils.previews` drop-in replacement and does all the heavy lifting for you.
+
+_3DN BIP_ or _3D Ninjas Blender Image Preview_ is a library, which allows blazingly fast preview image loads in Blender. Furthermore, it can load preview images of arbitrary size. It operates as an `bpy.utils.previews` drop-in replacement and does all the heavy lifting for you.
 
 Our library enables the following major use cases:
 
@@ -25,8 +26,8 @@ Notes:
 
 Download the following sample addons. You can easily install the ZIP files in Blender via the addon preferences tab.
 
-- Getting Started: [t3dn_bip_getting_started.zip](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_getting_started.zip)
-- Showcase: [t3dn_bip_showcase.zip](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_showcase.zip)
+-   Getting Started: [t3dn_bip_getting_started.zip](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_getting_started.zip)
+-   Showcase: [t3dn_bip_showcase.zip](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_showcase.zip)
 
 ## Library
 
@@ -61,21 +62,3 @@ python -m t3dn_bip_converter source_file.png destination_file.bip
 ### KIT OPS
 
 <a href="https://www.youtube.com/watch?v=_ZyNrptwtik&t=15s"><img src="https://img.youtube.com/vi/_ZyNrptwtik/maxresdefault.jpg"></a>
-
-## Showcases
-
-### Show `.bip` and `.jpg` Images
-
-<a href="https://www.youtube.com/watch?v=WUcGWo9gad4&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/WUcGWo9gad4/maxresdefault.jpg"></a>
-
-### Show `.bip` and `.jpg` Images in an Enum
-
-<a href="https://www.youtube.com/watch?v=H9-hCtpOLoo&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/H9-hCtpOLoo/maxresdefault.jpg"></a>
-
-### Show large `.bip` and `.jpg` Hero Images
-
-<a href="https://www.youtube.com/watch?v=W_xV93_M1Ak&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/W_xV93_M1Ak/maxresdefault.jpg"></a>
-
-### Show `.bip` and `.png` Images with an Alpha Channel
-
-<a href="https://www.youtube.com/watch?v=60D5l18AYy0&list=PLzkRr8BNKzgHKSkpBgRgCbDZlEjYypz-5"><img src="https://img.youtube.com/vi/60D5l18AYy0/maxresdefault.jpg"></a>
