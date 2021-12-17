@@ -15,7 +15,7 @@ jobs:
             # publish bip
             - run: sed -i -E "s/^__version__\s*=\s*.+$/__version__ = '$(cat ../.version | tr -d '[:space:]')'/" */__init__.py
               working-directory: bip
-            - run: python3 -m build
+            - run: python3 -m build -w
               working-directory: bip
             - run: python3 -m twine upload dist/*
               working-directory: bip
@@ -25,7 +25,7 @@ jobs:
             # publish bip_converter
             - run: sed -i -E "s/^__version__\s*=\s*.+$/__version__ = '$(cat ../.version | tr -d '[:space:]')'/" */__init__.py
               working-directory: bip_converter
-            - run: python3 -m build
+            - run: python3 -m build -w
               working-directory: bip_converter
             - run: python3 -m twine upload dist/*
               working-directory: bip_converter
