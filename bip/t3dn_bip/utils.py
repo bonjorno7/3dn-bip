@@ -10,10 +10,17 @@ from array import array
 from .formats import test_formats, BIP_FORMATS, PIL_FORMATS, MAGIC_LENGTH
 from . import settings
 
-USER_SITE = site.getusersitepackages()
+# The original code is checking for user's `site-packages` instead of Blender's python's `site-packages` folder
+# USER_SITE = site.getusersitepackages()
+#
+# if USER_SITE not in sys.path:
+#     sys.path.append(USER_SITE)
 
-if USER_SITE not in sys.path:
-    sys.path.append(USER_SITE)
+# Taking the last item from the list since the first is the python path
+SITE = site.getsitepackages()[-1]
+
+if SITE not in sys.path:
+    sys.path.append(SITE)
 
 Image = None
 
@@ -47,18 +54,23 @@ def install_pillow() -> bool:
         exe = sys.executable
     else:
         exe = bpy.app.binary_path_python
-
-    args = [exe, '-m', 'ensurepip', '--user', '--upgrade', '--default-pip']
+        
+    # Doing so, we don't need the '--user' flag anymore
+    # args = [exe, '-m', 'ensurepip', '--user', '--upgrade', '--default-pip']
+    args = [exe, '-m', 'ensurepip', '--upgrade', '--default-pip']
     if subprocess.call(args=args, timeout=600):
         return False
 
-    args = [exe, '-m', 'pip', 'install', '--user', '--upgrade', 'Pillow']
+    # Doing so, we don't need the '--user' flag anymore
+    # args = [exe, '-m', 'pip', 'install', '--user', '--upgrade', 'Pillow']
+    args = [exe, '-m', 'pip', 'install', '--upgrade', 'Pillow']
     if subprocess.call(args=args, timeout=600):
         return False
 
     name = 'PIL'
-    path = Path(USER_SITE).joinpath(name, '__init__.py')
-
+    # path = Path(USER_SITE).joinpath(name, '__init__.py')
+    path = Path(SITE).joinpath(name, '__init__.py')
+    
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
 
