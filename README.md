@@ -1,3 +1,5 @@
+Please note that we’re no longer actively maintaining the library ourselves. If anyone is interested in assuming ownership of the project, feel free to reach out. We’re aware that the library is an essential component of multiple Blender addons, so we trust it will remain in good hands.
+
 # 3D Ninjas | Blender Image Preview (BIP) Library
 
 ## Documentation
