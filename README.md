@@ -4,11 +4,11 @@ Please note that we’re no longer actively maintaining the library ourselves. I
 
 ## Documentation
 
-1. [Getting Started (this page)](https://3dninjas.github.io/3dn-bip/)
-2. [Install Pillow](https://3dninjas.github.io/3dn-bip/install_pillow/)
-3. [Reference](https://3dninjas.github.io/3dn-bip/reference/)
-4. [More](https://3dninjas.github.io/3dn-bip/more/)
-5. [Development](https://3dninjas.github.io/3dn-bip/development/)
+1. [Getting Started (this page)](https://bonjorno7.github.io/3dn-bip/)
+2. [Install Pillow](https://bonjorno7.github.io/3dn-bip/install_pillow/)
+3. [Reference](https://bonjorno7.github.io/3dn-bip/reference/)
+4. [More](https://bonjorno7.github.io/3dn-bip/more/)
+5. [Development](https://bonjorno7.github.io/3dn-bip/development/)
 
 ## What is 3DN BIP?
 
@@ -28,12 +28,12 @@ Notes:
 
 Download the following sample addons. You can easily install the ZIP files in Blender via the addon preferences tab.
 
--   Getting Started: [t3dn_bip_getting_started.zip](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_getting_started.zip)
--   Showcase: [t3dn_bip_showcase.zip](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip_showcase.zip)
+-   Getting Started: [t3dn_bip_getting_started.zip](https://github.com/bonjorno7/3dn-bip/releases/latest/download/t3dn_bip_getting_started.zip)
+-   Showcase: [t3dn_bip_showcase.zip](https://github.com/bonjorno7/3dn-bip/releases/latest/download/t3dn_bip_showcase.zip)
 
 ## Library
 
-The latest release of the library can be downloaded here: [t3dn_bip.zip](https://github.com/3dninjas/3dn-bip/releases/latest/download/t3dn_bip.zip)
+The latest release of the library can be downloaded here: [t3dn_bip.zip](https://github.com/bonjorno7/3dn-bip/releases/latest/download/t3dn_bip.zip)
 
 Just extract the zip file and copy the folder into your addon. Take a closer look at the examples given above to learn how to use the library.
 
